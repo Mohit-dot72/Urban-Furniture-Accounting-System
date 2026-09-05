@@ -49,10 +49,10 @@ const statusCls: Record<string, string> = {
 /* ── stat card ──────────────────────────────────────────────── */
 function StatCard({ title, value, change, up, icon: Icon, color }: any) {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex items-start justify-between">
+    <div className="bg-card rounded-xl p-4 shadow-none border border-border flex items-start justify-between">
       <div>
-        <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-1">{title}</p>
-        <p className="text-xl font-bold text-slate-800">{value}</p>
+        <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">{title}</p>
+        <p className="text-xl font-bold text-foreground">{value}</p>
         <p className={`text-[11px] font-semibold mt-1 flex items-center gap-1 ${up ? "text-emerald-600" : "text-red-500"}`}>
           {up ? <TrendingUp size={11} /> : <TrendingDown size={11} />}{change}
         </p>
@@ -70,8 +70,8 @@ export default function DashboardPage() {
     <div className="space-y-4">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <h1 className="text-base font-semibold text-slate-800">Dashboard</h1>
-        <div className="flex items-center gap-2 text-[11px] text-slate-500 bg-white border border-slate-200 rounded-lg px-3 py-1.5 shadow-sm">
+        <h1 className="text-base font-semibold text-foreground">Dashboard</h1>
+        <div className="flex items-center gap-2 text-[11px] text-muted-foreground bg-card border border-border rounded-lg px-3 py-1.5 shadow-none">
           📅 01 May 2025 – 31 May 2025
         </div>
       </div>
@@ -87,12 +87,12 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
         {/* Cash Flow */}
-        <div className="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-100 p-4">
+        <div className="lg:col-span-4 bg-card rounded-xl shadow-none border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-slate-700">Cash Flow Overview</p>
+            <p className="text-sm font-semibold text-foreground">Cash Flow Overview</p>
             <div className="flex gap-3">
               {[{ color: "bg-blue-500", label: "Inflow" }, { color: "bg-orange-400", label: "Outflow" }].map(l => (
-                <span key={l.label} className="flex items-center gap-1 text-[11px] text-slate-500">
+                <span key={l.label} className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <span className={`w-2.5 h-0.5 ${l.color} rounded-full inline-block`} />{l.label}
                 </span>
               ))}
@@ -111,8 +111,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Top Expenses */}
-        <div className="lg:col-span-3 bg-white rounded-xl shadow-sm border border-slate-100 p-4">
-          <p className="text-sm font-semibold text-slate-700 mb-3">Top Expenses</p>
+        <div className="lg:col-span-3 bg-card rounded-xl shadow-none border border-border p-4">
+          <p className="text-sm font-semibold text-foreground mb-3">Top Expenses</p>
           <ResponsiveContainer width="100%" height={140}>
             <PieChart>
               <Pie data={expenses} dataKey="value" cx="50%" cy="50%" innerRadius={45} outerRadius={65} paddingAngle={3}>
@@ -124,11 +124,11 @@ export default function DashboardPage() {
           <div className="space-y-1.5 mt-2">
             {expenses.map(e => (
               <div key={e.name} className="flex items-center justify-between text-[11px]">
-                <span className="flex items-center gap-1.5 text-slate-600">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
                   <span className="w-2 h-2 rounded-full inline-block shrink-0" style={{ background: e.color }} />
                   {e.name}
                 </span>
-                <span className="font-semibold text-slate-700">{e.pct}</span>
+                <span className="font-semibold text-foreground">{e.pct}</span>
               </div>
             ))}
           </div>
@@ -138,13 +138,13 @@ export default function DashboardPage() {
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
         {/* Recent Transactions */}
-        <div className="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-            <p className="text-sm font-semibold text-slate-700">Recent Transactions</p>
+        <div className="lg:col-span-5 bg-card rounded-xl shadow-none border border-border overflow-hidden">
+          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+            <p className="text-sm font-semibold text-foreground">Recent Transactions</p>
           </div>
           <table className="w-full">
             <thead>
-              <tr className="text-[10px] text-slate-400 uppercase tracking-wide bg-slate-50/70">
+              <tr className="text-[10px] text-muted-foreground uppercase tracking-wide bg-muted/70">
                 <th className="text-left px-4 py-2.5 font-medium">Date</th>
                 <th className="text-left px-3 py-2.5 font-medium">Type</th>
                 <th className="text-left px-3 py-2.5 font-medium">Reference</th>
@@ -155,12 +155,12 @@ export default function DashboardPage() {
             </thead>
             <tbody>
               {txns.map((t, i) => (
-                <tr key={i} className="border-t border-slate-50 hover:bg-slate-50/50 transition-colors">
-                  <td className="px-4 py-2.5 text-[11px] text-slate-500">{t.date}</td>
-                  <td className="px-3 py-2.5 text-[11px] font-medium text-slate-700">{t.type}</td>
+                <tr key={i} className="border-t border-slate-50 hover:bg-muted/50 transition-colors">
+                  <td className="px-4 py-2.5 text-[11px] text-muted-foreground">{t.date}</td>
+                  <td className="px-3 py-2.5 text-[11px] font-medium text-foreground">{t.type}</td>
                   <td className="px-3 py-2.5 text-[11px] text-blue-600 font-mono">{t.ref}</td>
-                  <td className="px-3 py-2.5 text-[11px] text-slate-600">{t.party}</td>
-                  <td className="px-3 py-2.5 text-[11px] font-semibold text-right text-slate-800">{fmt(t.amount)}</td>
+                  <td className="px-3 py-2.5 text-[11px] text-muted-foreground">{t.party}</td>
+                  <td className="px-3 py-2.5 text-[11px] font-semibold text-right text-foreground">{fmt(t.amount)}</td>
                   <td className="px-4 py-2.5 text-center">
                     <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusCls[t.status]}`}>{t.status}</span>
                   </td>
@@ -171,9 +171,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Bank Accounts */}
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100">
-          <div className="px-4 py-3 border-b border-slate-100">
-            <p className="text-sm font-semibold text-slate-700">Bank Accounts</p>
+        <div className="lg:col-span-2 bg-card rounded-xl shadow-none border border-border">
+          <div className="px-4 py-3 border-b border-border">
+            <p className="text-sm font-semibold text-foreground">Bank Accounts</p>
           </div>
           <div className="p-3 space-y-3">
             {banks.map((b, i) => (

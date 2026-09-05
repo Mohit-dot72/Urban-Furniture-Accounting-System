@@ -108,10 +108,10 @@ export default function TransactionsPage() {
         <Input placeholder="Search entries..." className="pl-8 h-8 text-sm" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Entry No.</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Journal</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Date</TableHead>
@@ -122,7 +122,7 @@ export default function TransactionsPage() {
           </TableHeader>
           <TableBody>
             {filtered.map((e) => (
-              <TableRow key={e.id} className="hover:bg-gray-50/50">
+              <TableRow key={e.id} className="hover:bg-muted/50">
                 <TableCell className="font-mono text-xs text-blue-600 font-medium py-3">{e.entryNo}</TableCell>
                 <TableCell className="text-sm">{e.journal}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">{e.date}</TableCell>
@@ -167,7 +167,7 @@ export default function TransactionsPage() {
             {/* Journal Lines */}
             <div className="border rounded-lg overflow-hidden">
               <table className="w-full">
-                <thead className="bg-gray-50 text-xs text-muted-foreground">
+                <thead className="bg-muted text-xs text-muted-foreground">
                   <tr>
                     <th className="text-left px-3 py-2 font-semibold">Account</th>
                     <th className="text-left px-3 py-2 font-semibold">Description</th>
@@ -204,7 +204,7 @@ export default function TransactionsPage() {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="bg-gray-50 border-t">
+                <tfoot className="bg-muted border-t">
                   <tr>
                     <td colSpan={2} className="px-3 py-2">
                       <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1" onClick={() => append({ account: "", description: "", debit: 0, credit: 0 })}>

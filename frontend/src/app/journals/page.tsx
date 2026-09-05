@@ -35,7 +35,7 @@ const typeColors: Record<string, string> = {
   PURCHASE: "bg-orange-100 text-orange-700",
   BANK: "bg-blue-100 text-blue-700",
   CASH: "bg-purple-100 text-purple-700",
-  GENERAL: "bg-gray-100 text-gray-700",
+  GENERAL: "bg-muted/50 text-foreground",
 };
 
 export default function JournalsPage() {
@@ -74,10 +74,10 @@ export default function JournalsPage() {
         <Input placeholder="Search journals..." className="pl-8 h-8 text-sm" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Journal Name</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Type</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Related Accounts</TableHead>
@@ -87,7 +87,7 @@ export default function JournalsPage() {
           </TableHeader>
           <TableBody>
             {filtered.map((j) => (
-              <TableRow key={j.id} className="hover:bg-gray-50/50">
+              <TableRow key={j.id} className="hover:bg-muted/50">
                 <TableCell className="font-medium text-sm py-3">{j.name}</TableCell>
                 <TableCell><span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${typeColors[j.type]}`}>{j.type}</span></TableCell>
                 <TableCell className="text-xs text-muted-foreground">{j.relatedAccounts}</TableCell>

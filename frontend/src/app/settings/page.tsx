@@ -18,7 +18,7 @@ export default function SettingsPage() {
       <h1 className="text-xl font-semibold">User Profile / Settings</h1>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-muted/50 rounded-lg p-1 w-fit">
         {([
           { id: "profile", label: "Profile", icon: User },
           { id: "password", label: "Change Password", icon: Lock },
@@ -28,7 +28,7 @@ export default function SettingsPage() {
             key={id}
             onClick={() => setTab(id)}
             className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${
-              tab === id ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"
+              tab === id ? "bg-card shadow-none text-foreground" : "text-muted-foreground"
             }`}
           >
             <Icon size={12} /> {label}
@@ -37,7 +37,7 @@ export default function SettingsPage() {
       </div>
 
       {tab === "profile" && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border-0 shadow-none">
           <CardContent className="p-6 space-y-5">
             <div className="flex items-center gap-5">
               <Avatar className="h-16 w-16">
@@ -70,7 +70,7 @@ export default function SettingsPage() {
 
             <div className="pt-2 border-t">
               <p className="text-xs font-semibold text-muted-foreground mb-3">Role & Permissions</p>
-              <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
+              <div className="flex items-center justify-between bg-muted rounded-lg px-4 py-3">
                 <div>
                   <p className="text-sm font-medium">Admin</p>
                   <p className="text-xs text-muted-foreground">Administrator · Full Access</p>
@@ -87,7 +87,7 @@ export default function SettingsPage() {
       )}
 
       {tab === "password" && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border-0 shadow-none">
           <CardContent className="p-6 space-y-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">Current Password</label>
@@ -109,7 +109,7 @@ export default function SettingsPage() {
       )}
 
       {tab === "preferences" && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border-0 shadow-none">
           <CardContent className="p-6 space-y-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">Language</label>

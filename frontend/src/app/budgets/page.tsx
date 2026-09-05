@@ -63,10 +63,10 @@ export default function BudgetsPage() {
         <Input placeholder="Search budgets..." className="pl-8 h-8 text-sm" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Budget Name</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Analytic Account</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Date Range</TableHead>
@@ -76,7 +76,7 @@ export default function BudgetsPage() {
           </TableHeader>
           <TableBody>
             {filtered.map((b) => (
-              <TableRow key={b.id} className="hover:bg-gray-50/50">
+              <TableRow key={b.id} className="hover:bg-muted/50">
                 <TableCell className="font-medium text-sm py-3">{b.name}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">{b.analyticAccount}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">{b.startDate} – {b.endDate}</TableCell>

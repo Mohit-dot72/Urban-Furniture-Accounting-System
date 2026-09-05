@@ -32,7 +32,7 @@ export default function ReportsPage() {
 
       {/* Report Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+        <Card className="border-0 shadow-none hover:shadow-md transition-shadow cursor-pointer">
           <CardContent className="p-6 flex flex-col items-start gap-3">
             <div className="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center">
               <BarChart3 className="text-blue-600" size={22} />
@@ -47,7 +47,7 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+        <Card className="border-0 shadow-none hover:shadow-md transition-shadow cursor-pointer">
           <CardContent className="p-6 flex flex-col items-start gap-3">
             <div className="w-11 h-11 bg-emerald-100 rounded-xl flex items-center justify-center">
               <TrendingUp className="text-emerald-600" size={22} />
@@ -62,7 +62,7 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+        <Card className="border-0 shadow-none hover:shadow-md transition-shadow cursor-pointer">
           <CardContent className="p-6 flex flex-col items-start gap-3">
             <div className="w-11 h-11 bg-purple-100 rounded-xl flex items-center justify-center">
               <PieChart className="text-purple-600" size={22} />
@@ -80,7 +80,7 @@ export default function ReportsPage() {
 
       {/* Balance Sheet Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card className="border-0 shadow-sm">
+        <Card className="border-0 shadow-none">
           <CardHeader className="pb-2 pt-4 px-5">
             <CardTitle className="text-sm font-semibold">Balance Sheet Summary</CardTitle>
           </CardHeader>
@@ -97,7 +97,7 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm">
+        <Card className="border-0 shadow-none">
           <CardHeader className="pb-2 pt-4 px-5">
             <CardTitle className="text-sm font-semibold">Profit & Loss (Monthly)</CardTitle>
           </CardHeader>
@@ -117,7 +117,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Key Metrics */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border-0 shadow-none">
         <CardHeader className="pb-3 pt-4 px-5">
           <CardTitle className="text-sm font-semibold">Key Financial Metrics — May 2025</CardTitle>
         </CardHeader>
@@ -138,7 +138,7 @@ export default function ReportsPage() {
                 { label: "Total Liabilities", value: 435000, color: "text-foreground" },
                 { label: "Net Worth (Equity)", value: 1415000, color: "text-blue-600" },
               ].map((row) => (
-                <tr key={row.label} className="border-b last:border-0 hover:bg-gray-50/50">
+                <tr key={row.label} className="border-b last:border-0 hover:bg-muted/50">
                   <td className="px-5 py-2.5 text-sm">{row.label}</td>
                   <td className={`px-5 py-2.5 text-right font-semibold text-sm ${row.color}`}>{fmt(row.value)}</td>
                 </tr>

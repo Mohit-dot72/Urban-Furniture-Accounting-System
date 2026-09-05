@@ -81,10 +81,10 @@ export default function ProductsPage() {
         </Button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Name</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Category</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Type</TableHead>
@@ -96,7 +96,7 @@ export default function ProductsPage() {
           </TableHeader>
           <TableBody>
             {filtered.map((p) => (
-              <TableRow key={p.id} className="hover:bg-gray-50/50">
+              <TableRow key={p.id} className="hover:bg-muted/50">
                 <TableCell className="font-medium text-sm py-3">{p.name}</TableCell>
                 <TableCell className="text-xs">{p.category}</TableCell>
                 <TableCell className="text-xs">
@@ -105,7 +105,7 @@ export default function ProductsPage() {
                 <TableCell className="text-xs text-right font-medium">{fmt(p.salesPrice)}</TableCell>
                 <TableCell className="text-xs text-right font-medium">{fmt(p.purchasePrice)}</TableCell>
                 <TableCell>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.status === "Active" ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"}`}>{p.status}</span>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.status === "Active" ? "bg-emerald-100 text-emerald-700" : "bg-muted/50 text-muted-foreground"}`}>{p.status}</span>
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-1">

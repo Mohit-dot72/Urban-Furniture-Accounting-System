@@ -13,14 +13,14 @@ interface TopHeaderProps {
 
 export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
   return (
-    <header className="flex h-12 items-center gap-3 border-b border-slate-200 bg-white px-5 sticky top-0 z-10 shrink-0">
+    <header className="flex h-12 items-center gap-3 border-b border-border bg-card px-5 sticky top-0 z-10 shrink-0">
       {/* Breadcrumb */}
       {breadcrumb.length > 0 && (
-        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           {breadcrumb.map((b, i) => (
             <span key={i} className="flex items-center gap-1.5">
               {i > 0 && <span>/</span>}
-              <span className={i === breadcrumb.length - 1 ? "text-slate-700 font-medium" : ""}>{b}</span>
+              <span className={i === breadcrumb.length - 1 ? "text-foreground font-medium" : ""}>{b}</span>
             </span>
           ))}
         </div>
@@ -30,22 +30,22 @@ export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
 
       {/* Search */}
       <div className="relative w-52">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 h-3.5 w-3.5" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground h-3.5 w-3.5" />
         <Input
           placeholder="Search..."
-          className="pl-8 h-7 text-xs bg-slate-50 border-slate-200 rounded-lg focus-visible:ring-blue-500"
+          className="pl-8 h-7 text-xs bg-muted border-border rounded-lg focus-visible:ring-blue-500"
         />
       </div>
 
       {/* Bell */}
-      <button className="relative p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-        <Bell size={15} className="text-slate-500" />
+      <button className="relative p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
+        <Bell size={15} className="text-muted-foreground" />
         <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
       </button>
 
       {/* Settings */}
-      <button className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-        <Settings size={15} className="text-slate-500" />
+      <button className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
+        <Settings size={15} className="text-muted-foreground" />
       </button>
 
       {/* User avatar */}
@@ -58,7 +58,7 @@ export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel className="text-xs">
             <div>Mohit Kumar</div>
-            <div className="font-normal text-slate-400">mohit@example.com</div>
+            <div className="font-normal text-muted-foreground">mohit@example.com</div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="text-xs">Profile</DropdownMenuItem>

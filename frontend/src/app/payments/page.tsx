@@ -82,9 +82,9 @@ export default function PaymentsPage() {
         <Button size="sm" onClick={() => setOpen(true)} className="gap-1.5"><Plus size={15} /> New Payment</Button>
       </div>
 
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-muted/50 rounded-lg p-1 w-fit">
         {(["all", "RECEIVE", "SEND"] as const).map((t) => (
-          <button key={t} onClick={() => setTab(t)} className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${tab === t ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"}`}>
+          <button key={t} onClick={() => setTab(t)} className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors ${tab === t ? "bg-card shadow-none text-foreground" : "text-muted-foreground"}`}>
             {t === "all" ? "All" : t === "RECEIVE" ? "Receive" : "Send"}
           </button>
         ))}
@@ -98,10 +98,10 @@ export default function PaymentsPage() {
         <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs"><Filter size={13} /> Filter</Button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Payment No</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Type</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Reference</TableHead>
@@ -113,7 +113,7 @@ export default function PaymentsPage() {
           </TableHeader>
           <TableBody>
             {filtered.map((p) => (
-              <TableRow key={p.id} className="hover:bg-gray-50/50">
+              <TableRow key={p.id} className="hover:bg-muted/50">
                 <TableCell className="font-mono text-xs text-blue-600 font-medium py-3">{p.paymentNo}</TableCell>
                 <TableCell>
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.type === "RECEIVE" ? "bg-emerald-100 text-emerald-700" : "bg-orange-100 text-orange-700"}`}>
@@ -125,7 +125,7 @@ export default function PaymentsPage() {
                 <TableCell className="text-xs">{p.mode}</TableCell>
                 <TableCell className="text-xs text-right font-semibold">{fmt(p.amount)}</TableCell>
                 <TableCell>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusStyle[p.status] || "bg-gray-100"}`}>{p.status}</span>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusStyle[p.status] || "bg-muted/50"}`}>{p.status}</span>
                 </TableCell>
               </TableRow>
             ))}

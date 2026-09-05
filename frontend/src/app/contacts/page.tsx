@@ -109,13 +109,13 @@ export default function ContactsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-muted/50 rounded-lg p-1 w-fit">
         {(["all", "CUSTOMER", "VENDOR"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`text-xs px-3 py-1.5 rounded-md font-medium transition-colors capitalize ${
-              tab === t ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"
+              tab === t ? "bg-card shadow-none text-foreground" : "text-muted-foreground"
             }`}
           >
             {t === "all" ? "All" : t === "CUSTOMER" ? "Customers" : "Vendors"}
@@ -140,10 +140,10 @@ export default function ContactsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border-0 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border-0 shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Name</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Type</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Email</TableHead>
@@ -157,7 +157,7 @@ export default function ContactsPage() {
             {filtered.map((contact) => {
               const typeStyle = typeLabels[contact.type] || typeLabels.CUSTOMER;
               return (
-                <TableRow key={contact.id} className="hover:bg-gray-50/50">
+                <TableRow key={contact.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium text-sm flex items-center gap-2.5 py-3">
                     <div className="w-7 h-7 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
                       {contact.name.slice(0, 2).toUpperCase()}
@@ -173,7 +173,7 @@ export default function ContactsPage() {
                   <TableCell className="text-xs">{contact.mobile}</TableCell>
                   <TableCell className="text-xs">{contact.city}</TableCell>
                   <TableCell>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${contact.status === "Active" ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"}`}>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${contact.status === "Active" ? "bg-emerald-100 text-emerald-700" : "bg-muted/50 text-muted-foreground"}`}>
                       {contact.status}
                     </span>
                   </TableCell>

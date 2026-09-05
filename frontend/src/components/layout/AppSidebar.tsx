@@ -45,7 +45,7 @@ export function AppSidebar() {
         {!collapsed && (
           <div className="overflow-hidden">
             <p className="text-white font-bold text-xs leading-tight tracking-wider">URBAN</p>
-            <p className="text-slate-400 text-[9px] uppercase tracking-widest">Furniture</p>
+            <p className="text-muted-foreground text-[9px] uppercase tracking-widest">Furniture</p>
           </div>
         )}
       </div>
@@ -60,7 +60,7 @@ export function AppSidebar() {
               href={item.url}
               title={collapsed ? item.title : undefined}
               className={cn(
-                "flex items-center gap-3 mx-2 px-3 py-2 rounded-lg mb-0.5 text-slate-400 hover:text-white hover:bg-[#253347] transition-all duration-150 group",
+                "flex items-center gap-3 mx-2 px-3 py-2 rounded-lg mb-0.5 text-muted-foreground hover:text-white hover:bg-[#253347] transition-all duration-150 group",
                 isActive && "bg-blue-600 text-white hover:bg-blue-600"
               )}
             >
@@ -82,7 +82,7 @@ export function AppSidebar() {
             </div>
             <div className="overflow-hidden">
               <p className="text-white text-xs font-medium truncate">Mohit Kumar</p>
-              <p className="text-slate-500 text-[10px]">Admin</p>
+              <p className="text-muted-foreground text-[10px]">Admin</p>
             </div>
           </div>
         </div>
@@ -91,7 +91,7 @@ export function AppSidebar() {
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 bg-[#1e2a3a] border border-[#2d3f55] rounded-full flex items-center justify-center text-slate-400 hover:text-white z-10"
+        className="absolute -right-3 top-6 w-6 h-6 bg-[#1e2a3a] border border-[#2d3f55] rounded-full flex items-center justify-center text-muted-foreground hover:text-white z-10"
       >
         {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </button>

@@ -16,29 +16,29 @@ export default function SalesFlowPage() {
         <Button size="sm" className="gap-1.5"><Plus size={15} /> New Sales Order</Button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row items-center justify-center gap-4 overflow-x-auto">
+      <div className="bg-card rounded-xl shadow-none border border-border p-8 flex flex-col md:flex-row items-center justify-center gap-4 overflow-x-auto">
         
         {/* Sales Order */}
-        <Card className="w-72 shrink-0 border border-slate-200 shadow-sm relative">
-          <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
-            <CardTitle className="text-sm font-semibold text-slate-800">Sales Order</CardTitle>
+        <Card className="w-72 shrink-0 border border-border shadow-none relative">
+          <CardHeader className="pb-3 border-b border-border bg-muted/50 rounded-t-xl">
+            <CardTitle className="text-sm font-semibold text-foreground">Sales Order</CardTitle>
             <p className="text-xs font-mono text-blue-600 mt-1">SO/2025/019</p>
           </CardHeader>
           <CardContent className="pt-4 pb-2 text-sm space-y-3">
             <div>
-              <p className="text-xs text-slate-400 mb-0.5">For</p>
+              <p className="text-xs text-muted-foreground mb-0.5">For</p>
               <p className="font-medium">Nirmesh Pathak</p>
             </div>
             <div className="flex justify-between border-t border-dashed pt-3">
-              <span className="text-slate-500">Date</span>
+              <span className="text-muted-foreground">Date</span>
               <span className="font-medium">26 May 2025</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Total</span>
-              <span className="font-semibold text-slate-800">{fmt(125000)}</span>
+              <span className="text-muted-foreground">Total</span>
+              <span className="font-semibold text-foreground">{fmt(125000)}</span>
             </div>
             <div className="flex justify-between items-center pt-2">
-              <span className="text-slate-500">Status</span>
+              <span className="text-muted-foreground">Status</span>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">Confirmed</span>
             </div>
           </CardContent>
@@ -51,30 +51,30 @@ export default function SalesFlowPage() {
         <div className="h-8 w-[2px] bg-slate-200 md:hidden block" />
 
         {/* Customer Invoice */}
-        <Card className="w-72 shrink-0 border border-slate-200 shadow-sm relative">
-          <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
-            <CardTitle className="text-sm font-semibold text-slate-800">Customer Invoice</CardTitle>
+        <Card className="w-72 shrink-0 border border-border shadow-none relative">
+          <CardHeader className="pb-3 border-b border-border bg-muted/50 rounded-t-xl">
+            <CardTitle className="text-sm font-semibold text-foreground">Customer Invoice</CardTitle>
             <p className="text-xs font-mono text-blue-600 mt-1">INV/2025/016</p>
           </CardHeader>
           <CardContent className="pt-4 pb-2 text-sm space-y-3">
             <div className="flex justify-between">
-              <span className="text-slate-500">From SO</span>
+              <span className="text-muted-foreground">From SO</span>
               <span className="font-mono text-xs">SO/2025/019</span>
             </div>
             <div className="flex justify-between border-t border-dashed pt-3">
-              <span className="text-slate-500">Invoice Date</span>
+              <span className="text-muted-foreground">Invoice Date</span>
               <span className="font-medium">28 May 2025</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Due Date</span>
+              <span className="text-muted-foreground">Due Date</span>
               <span className="font-medium">07 Jun 2025</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Total</span>
-              <span className="font-semibold text-slate-800">{fmt(125000)}</span>
+              <span className="text-muted-foreground">Total</span>
+              <span className="font-semibold text-foreground">{fmt(125000)}</span>
             </div>
             <div className="flex justify-between items-center pt-2">
-              <span className="text-slate-500">Status</span>
+              <span className="text-muted-foreground">Status</span>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Paid</span>
             </div>
           </CardContent>
@@ -87,30 +87,30 @@ export default function SalesFlowPage() {
         <div className="h-8 w-[2px] bg-slate-200 md:hidden block" />
 
         {/* Receipt */}
-        <Card className="w-72 shrink-0 border border-slate-200 shadow-sm relative">
-          <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
-            <CardTitle className="text-sm font-semibold text-slate-800">Receipt (Bank)</CardTitle>
+        <Card className="w-72 shrink-0 border border-border shadow-none relative">
+          <CardHeader className="pb-3 border-b border-border bg-muted/50 rounded-t-xl">
+            <CardTitle className="text-sm font-semibold text-foreground">Receipt (Bank)</CardTitle>
             <p className="text-xs font-mono text-blue-600 mt-1">RCPT/2025/019</p>
           </CardHeader>
           <CardContent className="pt-4 pb-2 text-sm space-y-3">
              <div className="flex justify-between">
-              <span className="text-slate-500">From</span>
+              <span className="text-muted-foreground">From</span>
               <span className="font-medium">Nirmesh Pathak</span>
             </div>
             <div className="flex justify-between border-t border-dashed pt-3">
-              <span className="text-slate-500">Date</span>
+              <span className="text-muted-foreground">Date</span>
               <span className="font-medium">28 May 2025</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Mode</span>
+              <span className="text-muted-foreground">Mode</span>
               <span className="font-medium">HDFC Bank</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Amount</span>
-              <span className="font-semibold text-slate-800">{fmt(125000)}</span>
+              <span className="text-muted-foreground">Amount</span>
+              <span className="font-semibold text-foreground">{fmt(125000)}</span>
             </div>
             <div className="flex justify-between items-center pt-2">
-              <span className="text-slate-500">Status</span>
+              <span className="text-muted-foreground">Status</span>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Received</span>
             </div>
           </CardContent>

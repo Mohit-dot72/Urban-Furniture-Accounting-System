@@ -78,10 +78,10 @@ export default function AccountsPage() {
         <Input placeholder="Search accounts..." className="pl-8 h-8 text-sm" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl shadow-none overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
+            <TableRow className="bg-muted/80 hover:bg-muted/80">
               <TableHead className="text-xs font-semibold text-muted-foreground">Code</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Account Name</TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground">Type</TableHead>
@@ -92,7 +92,7 @@ export default function AccountsPage() {
           </TableHeader>
           <TableBody>
             {filtered.map((a) => (
-              <TableRow key={a.id} className="hover:bg-gray-50/50">
+              <TableRow key={a.id} className="hover:bg-muted/50">
                 <TableCell className="text-xs font-mono text-muted-foreground">{a.code}</TableCell>
                 <TableCell className="font-medium text-sm py-3">{a.name}</TableCell>
                 <TableCell><span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${typeColors[a.type]}`}>{a.type}</span></TableCell>
