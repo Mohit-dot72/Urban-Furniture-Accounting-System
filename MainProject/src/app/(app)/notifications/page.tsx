@@ -16,7 +16,7 @@ interface NotificationItem {
   id: string;
   title: string;
   message: string;
-  details: string;
+  details?: string;
   timestamp: string;
   category: "FINANCIAL" | "INVENTORY" | "BUDGET" | "SYSTEM";
   read: boolean;
@@ -96,6 +96,7 @@ const initialNotifications: NotificationItem[] = [
     id: "notif-6",
     title: "Purchase Order Confirmed",
     message: "PO/2025/037 issued to Rohan Kapoor Decor (₹75,000) has been confirmed by supplier.",
+    details: "Supplier Rohan Kapoor Decor has formally accepted Purchase Order PO/2025/037. Scheduled delivery date is set for June 5, 2025. Goods Receipt Note (GRN) pending arrival.",
     timestamp: "Yesterday",
     category: "FINANCIAL",
     read: true,
@@ -343,9 +344,11 @@ export default function NotificationsPage() {
                 <p className="text-xs font-medium text-foreground leading-relaxed">
                   {selectedNotif.message}
                 </p>
-                <p className="text-xs text-muted-foreground leading-relaxed border-t border-border/60 pt-2">
-                  {selectedNotif.details}
-                </p>
+                {selectedNotif.details && (
+                  <p className="text-xs text-muted-foreground leading-relaxed border-t border-border/60 pt-2">
+                    {selectedNotif.details}
+                  </p>
+                )}
               </div>
             </div>
 
