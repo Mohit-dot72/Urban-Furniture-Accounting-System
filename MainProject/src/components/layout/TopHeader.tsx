@@ -40,11 +40,15 @@ export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
         />
       </div>
 
-      {/* Bell */}
-      <button className="relative p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
-        <Bell size={15} className="text-muted-foreground" />
-        <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
-      </button>
+      {/* Bell Notification Button */}
+      <Link
+        href="/notifications"
+        className="relative p-1.5 rounded-lg hover:bg-muted/50 transition-colors group flex items-center justify-center"
+        title="Notifications"
+      >
+        <Bell size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-card animate-pulse" />
+      </Link>
 
       {/* Settings */}
       <button className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">

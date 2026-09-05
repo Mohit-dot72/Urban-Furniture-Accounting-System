@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard, Users, Package, Wallet,
+  LayoutDashboard, Bell, Users, Package, Wallet,
   BookOpen, ArrowRightLeft, CreditCard, PieChart,
   BarChart3, Settings, Building2, ChevronLeft, ChevronRight
 } from "lucide-react";
@@ -12,6 +12,7 @@ import { useState } from "react";
 
 const navItems = [
   { title: "Dashboard",         icon: LayoutDashboard, url: "/" },
+  { title: "Notifications",     icon: Bell,             url: "/notifications" },
   { title: "Contacts",          icon: Users,            url: "/contacts" },
   { title: "Products",          icon: Package,          url: "/products" },
   { title: "Chart of Accounts", icon: Wallet,           url: "/accounts" },
