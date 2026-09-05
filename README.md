@@ -1,100 +1,80 @@
-# Urban Furniture — Accounting System
+# Urban Furniture Accounting System
 
-A full-stack double-entry accounting web application for Urban Furniture.
+A comprehensive double-entry accounting and ERP system built specifically for Urban Furniture, developed during the Odoo Hackathon.
 
-## Architecture
+## 🚀 Tech Stack
 
-```
-urban-furniture-accounting/
-├── backend/   → Node.js + Express (TypeScript) + PostgreSQL via Prisma — port 5000
-└── frontend/  → React + Vite (TypeScript) + Tailwind CSS — port 5173
-```
+- **Framework**: [Next.js 16](https://nextjs.org/) (React 19)
+- **Database**: PostgreSQL (via Docker)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Authentication**: NextAuth (Auth.js) & bcryptjs
+- **Styling**: Tailwind CSS v4, Shadcn UI, Base UI
+- **State Management**: Zustand, TanStack React Query
+- **Forms & Validation**: React Hook Form, Zod
 
-## Prerequisites
+## ✨ Features
 
-- Node.js 18+
-- PostgreSQL 14+ (local or cloud instance)
-- Cloudinary account (for contact image uploads)
+- **Double-Entry Accounting**: Full chart of accounts, journal entries, and general ledgers.
+- **Role-Based Access Control**: Admin, Invoicing User, and Contact roles.
+- **Sales Flow**: Manage Sales Orders, Invoices, and Payments (Receipts).
+- **Purchase Flow**: Manage Purchase Orders, Bills, and Payments.
+- **Contact Management**: Keep track of Customers and Vendors.
+- **Product Management**: Manage Goods and Services with pricing.
+- **Budgeting**: Plan and track budgets across accounts.
 
-## Setup
+## 📦 Getting Started
 
-### 1. Configure Backend Environment
+### Prerequisites
 
-```bash
-cd backend
-cp .env.example .env
-# Edit .env with your PostgreSQL credentials and secrets
-```
+- Node.js (v20+)
+- Docker & Docker Compose (for PostgreSQL database)
 
-Required values in `backend/.env`:
-```
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/urban_furniture?schema=public
-JWT_SECRET=your-super-secret-key-min-32-chars
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-```
+### Installation
 
-### 2. Configure Frontend Environment
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Mohit-dot72/oddo-Urban-Furniture-Accounting-System.git
+   cd oddo-Urban-Furniture-Accounting-System
+   ```
 
-```bash
-cd frontend
-cp .env.example .env
-# Default: VITE_API_BASE_URL=http://localhost:5000/api/v1
-```
+2. **Start the Database**
+   ```bash
+   docker-compose up -d
+   ```
 
-### 3. Run Database Migration + Seed
+3. **Install Dependencies**
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-```bash
-cd backend
-npm install
-npx prisma migrate dev --name init
-npx prisma generate
-npx prisma db seed
-```
+4. **Environment Variables**
+   Create a `.env.local` file in the `frontend` directory and add your database URL:
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/accounting_db?schema=public"
+   ```
 
-Seed will print user credentials to console.
+5. **Run Prisma Migrations**
+   ```bash
+   npm run db:push
+   # or
+   npm run db:migrate
+   ```
 
-### 4. Start Both Servers
+6. **Start the Development Server**
+   ```bash
+   npm run dev
+   ```
 
-```bash
-# From repo root (runs both with concurrently):
-npm install
-npm run dev
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# Or run separately:
-# Terminal 1:
-cd backend && npm run dev
+## 🏗️ Project Structure
 
-# Terminal 2:
-cd frontend && npm run dev
-```
+- `/docker-compose.yml` - PostgreSQL database container configuration.
+- `/frontend` - Next.js application containing both the frontend UI and backend API routes.
+  - `/frontend/prisma` - Prisma schema and database configuration.
+  - `/frontend/src` - Application source code.
 
-- Backend: http://localhost:5000
-- Frontend: http://localhost:5173
+## 📄 License
 
-## Default Users (after seeding)
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@urbanfurniture.com | Admin@123 |
-| Accountant | accountant@urbanfurniture.com | Account@123 |
-| Contact (Nimesh Pathak) | nimesh@example.com | Contact@123 |
-
-## Tech Stack
-
-### Backend
-- Node.js + Express (TypeScript)
-- PostgreSQL + Prisma ORM
-- JWT authentication + bcryptjs
-- Zod validation
-- Cloudinary (image uploads)
-
-### Frontend
-- React + Vite (TypeScript)
-- Tailwind CSS
-- React Router v6
-- React Query (@tanstack/react-query)
-- Axios with JWT interceptor
-- React Hook Form + Zod
-- Recharts
+This project is open-source and available under the [MIT License](LICENSE).
