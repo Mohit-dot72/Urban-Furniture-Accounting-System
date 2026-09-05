@@ -1,0 +1,30 @@
+export const permissions: Record<string, string[]> = {
+  admin: [
+    'create:masterdata',
+    'edit:masterdata',
+    'archive:masterdata',
+    'delete:masterdata',
+    'create:transaction',
+    'view:transaction',
+    'view:reports',
+    'create:user',
+    'view:all:invoices',
+    'view:all:bills',
+    'record:payment',
+  ],
+  accountant: [
+    'create:masterdata',
+    'edit:masterdata',
+    'create:transaction',
+    'view:transaction',
+    'view:reports',
+    'view:all:invoices',
+    'view:all:bills',
+    'record:payment',
+  ],
+  contact: [
+    'view:own:invoices',
+    'view:own:bills',
+    'make:payment',
+  ],
+};

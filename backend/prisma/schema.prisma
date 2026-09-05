@@ -1,0 +1,316 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  accountant
+  contact
+}
+
+enum ContactType {
+  customer
+  vendor
+  both
+}
+
+enum ProductType {
+  goods
+  service
+  combo
+}
+
+enum AccountType {
+  asset
+  liability
+  expense
+  income
+  capital
+}
+
+enum JournalType {
+  sales
+  purchase
+  bank
+  cash
+}
+
+enum SourceType {
+  purchase_bill
+  sales_invoice
+  payment
+  manual
+}
+
+enum AnalyticType {
+  income
+  expense
+}
+
+enum OrderStatus {
+  draft
+  confirmed
+  billed
+  cancelled
+}
+
+enum SOStatus {
+  draft
+  confirmed
+  invoiced
+  cancelled
+}
+
+enum PaymentStatus {
+  unpaid
+  partial
+  paid
+}
+
+enum PaymentMethod {
+  cash
+  bank
+}
+
+enum PaymentDirection {
+  incoming
+  outgoing
+}
+
+enum PaymentAgainst {
+  vendor_bill
+  customer_invoice
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  contactId    String?
+  contact      Contact? @relation(fields: [contactId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Contact {
+  id              String            @id @default(cuid())
+  name            String
+  type            ContactType
+  email           String
+  mobile          String
+  city            String?
+  state           String?
+  pincode         String?
+  profileImageUrl String?
+  isArchived      Boolean           @default(false)
+  users           User[]
+  purchaseOrders  PurchaseOrder[]
+  vendorBills     VendorBill[]
+  salesOrders     SalesOrder[]
+  invoices        CustomerInvoice[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Product {
+  id         String      @id @default(cuid())
+  name       String
+  type       ProductType
+  salesPrice Decimal     @db.Decimal(12, 2)
+  costPrice  Decimal     @db.Decimal(12, 2)
+  category   String?
+  isArchived Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Account {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  type              AccountType
+  isSystemDefault   Boolean            @default(false)
+  journalEntryItems JournalEntryItem[]
+  journals          Journal[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Journal {
+  id               String         @id @default(cuid())
+  name             String
+  type             JournalType
+  defaultAccountId String
+  defaultAccount   Account        @relation(fields: [defaultAccountId], references: [id])
+  entries          JournalEntry[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model JournalEntry {
+  id         String             @id @default(cuid())
+  journalId  String
+  journal    Journal            @relation(fields: [journalId], references: [id])
+  date       DateTime           @default(now())
+  reference  String?
+  sourceType SourceType
+  sourceId   String?
+  items      JournalEntryItem[]
+  createdAt  DateTime           @default(now())
+}
+
+model JournalEntryItem {
+  id                String          @id @default(cuid())
+  journalEntryId    String
+  journalEntry      JournalEntry    @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId         String
+  account           Account         @relation(fields: [accountId], references: [id])
+  debit             Decimal         @default(0) @db.Decimal(12, 2)
+  credit            Decimal         @default(0) @db.Decimal(12, 2)
+  analyticAccountId String?
+  analyticAccount   AnalyticAccount? @relation(fields: [analyticAccountId], references: [id])
+}
+
+model AnalyticAccount {
+  id                String             @id @default(cuid())
+  name              String
+  type              AnalyticType
+  budgets           Budget[]
+  journalEntryItems JournalEntryItem[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Budget {
+  id                String          @id @default(cuid())
+  name              String
+  startDate         DateTime
+  endDate           DateTime
+  responsiblePerson String
+  plannedAmount     Decimal         @db.Decimal(12, 2)
+  analyticAccountId String
+  analyticAccount   AnalyticAccount @relation(fields: [analyticAccountId], references: [id])
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model PurchaseOrder {
+  id          String                  @id @default(cuid())
+  poNumber    String                  @unique
+  vendorId    String
+  vendor      Contact                 @relation(fields: [vendorId], references: [id])
+  status      OrderStatus             @default(draft)
+  totalAmount Decimal                 @default(0) @db.Decimal(12, 2)
+  lineItems   PurchaseOrderLineItem[]
+  vendorBill  VendorBill?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+}
+
+model PurchaseOrderLineItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String
+  quantity        Int
+  unitPrice       Decimal       @db.Decimal(12, 2)
+}
+
+model VendorBill {
+  id              String               @id @default(cuid())
+  billNumber      String               @unique
+  purchaseOrderId String               @unique
+  purchaseOrder   PurchaseOrder        @relation(fields: [purchaseOrderId], references: [id])
+  vendorId        String
+  vendor          Contact              @relation(fields: [vendorId], references: [id])
+  invoiceDate     DateTime
+  dueDate         DateTime
+  totalAmount     Decimal              @db.Decimal(12, 2)
+  amountPaid      Decimal              @default(0) @db.Decimal(12, 2)
+  paymentStatus   PaymentStatus        @default(unpaid)
+  lineItems       VendorBillLineItem[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+}
+
+model VendorBillLineItem {
+  id           String     @id @default(cuid())
+  vendorBillId String
+  vendorBill   VendorBill @relation(fields: [vendorBillId], references: [id], onDelete: Cascade)
+  productId    String
+  quantity     Int
+  unitPrice    Decimal    @db.Decimal(12, 2)
+}
+
+model SalesOrder {
+  id          String               @id @default(cuid())
+  soNumber    String               @unique
+  customerId  String
+  customer    Contact              @relation(fields: [customerId], references: [id])
+  status      SOStatus             @default(draft)
+  totalAmount Decimal              @default(0) @db.Decimal(12, 2)
+  lineItems   SalesOrderLineItem[]
+  invoice     CustomerInvoice?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+}
+
+model SalesOrderLineItem {
+  id           String     @id @default(cuid())
+  salesOrderId String
+  salesOrder   SalesOrder @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+  productId    String
+  quantity     Int
+  unitPrice    Decimal    @db.Decimal(12, 2)
+  taxRate      Decimal    @default(0) @db.Decimal(5, 2)
+}
+
+model CustomerInvoice {
+  id            String                    @id @default(cuid())
+  invoiceNumber String                    @unique
+  salesOrderId  String                    @unique
+  salesOrder    SalesOrder                @relation(fields: [salesOrderId], references: [id])
+  customerId    String
+  customer      Contact                   @relation(fields: [customerId], references: [id])
+  invoiceDate   DateTime
+  dueDate       DateTime
+  totalAmount   Decimal                   @db.Decimal(12, 2)
+  amountPaid    Decimal                   @default(0) @db.Decimal(12, 2)
+  paymentStatus PaymentStatus             @default(unpaid)
+  lineItems     CustomerInvoiceLineItem[]
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
+}
+
+model CustomerInvoiceLineItem {
+  id                String          @id @default(cuid())
+  customerInvoiceId String
+  customerInvoice   CustomerInvoice @relation(fields: [customerInvoiceId], references: [id], onDelete: Cascade)
+  productId         String
+  quantity          Int
+  unitPrice         Decimal         @db.Decimal(12, 2)
+  taxRate           Decimal         @default(0) @db.Decimal(5, 2)
+}
+
+model Payment {
+  id            String           @id @default(cuid())
+  paymentNumber String           @unique
+  direction     PaymentDirection
+  against       PaymentAgainst
+  referenceId   String
+  method        PaymentMethod
+  amount        Decimal          @db.Decimal(12, 2)
+  date          DateTime         @default(now())
+  createdAt     DateTime         @default(now())
+}
+
+model Counter {
+  key String @id
+  seq Int    @default(0)
+}
