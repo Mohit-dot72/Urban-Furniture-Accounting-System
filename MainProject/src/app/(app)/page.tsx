@@ -61,7 +61,7 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px] text-muted-foreground text-sm">
         <Loader2 className="animate-spin mr-2" size={20} />
-        Loading real-time financial stats from PostgreSQL...
+        Loading real-time financial stats...
       </div>
     );
   }
@@ -78,7 +78,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-base font-semibold text-foreground">Dashboard</h1>
-          <p className="text-xs text-muted-foreground">Live Financial Summary & Ledger Metrics (PostgreSQL)</p>
+          <p className="text-xs text-muted-foreground">Live Financial Summary & Ledger Metrics</p>
         </div>
         <div className="flex items-center gap-2 text-[11px] text-muted-foreground bg-card border border-border rounded-lg px-3 py-1.5 shadow-none font-medium">
           📅 Active Period: May 2025 – Present
@@ -98,7 +98,7 @@ export default function DashboardPage() {
         {/* Cash Flow */}
         <div className="lg:col-span-4 bg-card rounded-xl shadow-none border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-foreground">Cash Flow Overview (PostgreSQL Receipts & Disbursements)</p>
+            <p className="text-sm font-semibold text-foreground">Cash Flow Overview (Receipts & Disbursements)</p>
             <div className="flex gap-3">
               {[{ color: "bg-blue-500", label: "Inflow" }, { color: "bg-orange-400", label: "Outflow" }].map(l => (
                 <span key={l.label} className="flex items-center gap-1 text-[11px] text-muted-foreground">
@@ -149,7 +149,7 @@ export default function DashboardPage() {
         {/* Recent Transactions */}
         <div className="lg:col-span-5 bg-card rounded-xl shadow-none border border-border overflow-hidden">
           <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-            <p className="text-sm font-semibold text-foreground">Recent PostgreSQL Transactions</p>
+            <p className="text-sm font-semibold text-foreground">Recent Transactions</p>
           </div>
           <table className="w-full">
             <thead>
@@ -166,7 +166,7 @@ export default function DashboardPage() {
               {txns.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-6 text-xs text-muted-foreground">
-                    No transactions recorded yet in PostgreSQL.
+                    No transactions recorded yet.
                   </td>
                 </tr>
               ) : (

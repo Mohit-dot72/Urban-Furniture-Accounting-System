@@ -141,7 +141,7 @@ export default function SalesFlowPage() {
         <div>
           <h1 className="text-xl font-semibold">Sales Flow</h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            PostgreSQL Live Sales Orders, Invoices & Customer Receipts
+            Live Sales Orders, Invoices & Customer Receipts
           </p>
         </div>
         <div className="flex items-center gap-2">
