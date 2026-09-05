@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -26,104 +26,28 @@ interface NotificationItem {
   referenceCode?: string;
 }
 
-const initialNotifications: NotificationItem[] = [
-  {
-    id: "notif-1",
-    title: "Invoice Overdue Alert",
-    message: "Invoice INV/2025/077 for Priya Sharma (₹1,73,000) is 6 days past its due date.",
-    details: "The payment term for Invoice INV/2025/077 expired on May 30, 2025. Total outstanding amount is ₹1,73,000 under Accounts Receivable. Contact customer Priya Sharma (priya.sharma@designstudio.in) to arrange payment collection.",
-    timestamp: "10 mins ago",
-    category: "FINANCIAL",
-    read: false,
-    severity: "error",
-    actionUrl: "/sales",
-    actionLabel: "Go to Invoice / Sales",
-    referenceCode: "INV/2025/077",
-  },
-  {
-    id: "notif-2",
-    title: "Payment Received",
-    message: "Received ₹69,000 from Siddharth Verma via ICICI Bank (Ref: RCPT/2025/035).",
-    details: "Payment receipt RCPT/2025/035 of ₹69,000 has been deposited into ICICI Bank Account. Invoice INV/2025/079 is marked as Fully Paid. General Ledger posted Debit: ICICI Bank (₹69,000), Credit: Accounts Receivable (₹69,000).",
-    timestamp: "1 hour ago",
-    category: "FINANCIAL",
-    read: false,
-    severity: "success",
-    actionUrl: "/payments",
-    actionLabel: "View Payment Receipt",
-    referenceCode: "RCPT/2025/035",
-  },
-  {
-    id: "notif-3",
-    title: "Budget Threshold Warning",
-    message: "Q2 Showroom Operating Expense budget has reached 85.4% of planned threshold (₹4,50,000).",
-    details: "Actual expenditure under Showroom Operating Expense has reached ₹3,84,300 against the planned Q2 budget target of ₹4,50,000. Review upcoming rental and facility bills to avoid overshooting target limits.",
-    timestamp: "3 hours ago",
-    category: "BUDGET",
-    read: false,
-    severity: "warning",
-    actionUrl: "/budgets",
-    actionLabel: "Check Budget Analytics",
-    referenceCode: "BDG-2025-Q2",
-  },
-  {
-    id: "notif-4",
-    title: "Vendor Bill Due Soon",
-    message: "Vendor Bill BILL/2025/056 from Rajesh Kumar Timber Co. (₹1,24,000) is due in 2 days.",
-    details: "Bill BILL/2025/056 generated from Purchase Order PO/2025/034 (Seasoned Oak Slabs) is due on May 21, 2025. Please process bank payment disbursement from HDFC Bank Account.",
-    timestamp: "5 hours ago",
-    category: "FINANCIAL",
-    read: true,
-    severity: "info",
-    actionUrl: "/purchases",
-    actionLabel: "Pay Vendor Bill",
-    referenceCode: "BILL/2025/056",
-  },
-  {
-    id: "notif-5",
-    title: "Low Stock Alert: Ergonomic Mesh Chair",
-    message: "Inventory count for 'Ergonomic Mesh Chair' has fallen below safety threshold (4 units remaining).",
-    details: "Current available stock for Ergonomic Mesh Chair in Main Warehouse is 4 units (Minimum Reorder Point: 10 units). Recommended supplier: Azure Furniture Ltd.",
-    timestamp: "Yesterday",
-    category: "INVENTORY",
-    read: true,
-    severity: "warning",
-    actionUrl: "/products",
-    actionLabel: "Reorder Product",
-    referenceCode: "PROD-CHAIR-02",
-  },
-  {
-    id: "notif-6",
-    title: "Purchase Order Confirmed",
-    message: "PO/2025/037 issued to Rohan Kapoor Decor (₹75,000) has been confirmed by supplier.",
-    details: "Supplier Rohan Kapoor Decor has formally accepted Purchase Order PO/2025/037. Scheduled delivery date is set for June 5, 2025. Goods Receipt Note (GRN) pending arrival.",
-    timestamp: "Yesterday",
-    category: "FINANCIAL",
-    read: true,
-    severity: "success",
-    actionUrl: "/purchases",
-    actionLabel: "View Purchase Flow",
-    referenceCode: "PO/2025/037",
-  },
-  {
-    id: "notif-7",
-    title: "Security Audit Notification",
-    message: "Admin login detected from new IP address (192.168.1.104 - Windows 11).",
-    details: "User admin@urbanfurniture.com logged in successfully via NextAuth Credentials Provider. Device: Chrome 124 on Windows 11. IP: 192.168.1.104.",
-    timestamp: "2 days ago",
-    category: "SYSTEM",
-    read: true,
-    severity: "info",
-    actionUrl: "/settings",
-    actionLabel: "Open Security Logs",
-    referenceCode: "SEC-LOG-9921",
-  },
-];
+
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>(initialNotifications);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"ALL" | "UNREAD" | "FINANCIAL" | "BUDGET" | "INVENTORY" | "SYSTEM">("ALL");
   const [selectedNotif, setSelectedNotif] = useState<NotificationItem | null>(null);
+
+  useEffect(() => {
+    async function fetchNotifs() {
+      try {
+        const res = await fetch("/api/notifications");
+        const data = await res.json();
+        setNotifications(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load notifications", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchNotifs();
+  }, []);
 
   const markAsRead = (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));

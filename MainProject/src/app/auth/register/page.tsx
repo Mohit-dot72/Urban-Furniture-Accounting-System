@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -60,7 +61,19 @@ export default function RegisterPage() {
         throw new Error(errorData.message || "Something went wrong");
       }
 
-      router.push("/auth/login");
+      // Auto sign-in after registration & redirect directly to Profile page (/settings)
+      const signInRes = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (signInRes?.error) {
+        router.push("/auth/login");
+      } else {
+        router.push("/settings");
+        router.refresh();
+      }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

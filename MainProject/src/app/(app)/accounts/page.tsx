@@ -12,7 +12,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Plus, Search, Pencil, Trash2, Loader2 } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Loader2, AlertTriangle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -88,10 +88,14 @@ export default function AccountsPage() {
     }
   };
 
-  const del = async (id: string) => {
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await fetch(`/api/accounts/${id}`, { method: "DELETE" });
-      setAccounts((prev) => prev.filter((a) => a.id !== id));
+      await fetch(`/api/accounts/${deleteTarget.id}`, { method: "DELETE" });
+      setAccounts((prev) => prev.filter((a) => a.id !== deleteTarget.id));
+      setDeleteTarget(null);
     } catch (err) {
       console.error("Failed to delete account", err);
     }
@@ -148,7 +152,7 @@ export default function AccountsPage() {
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(a)}><Pencil size={13} className="text-muted-foreground" /></Button>
-                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => del(a.id)}><Trash2 size={13} className="text-red-400" /></Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeleteTarget(a)}><Trash2 size={13} className="text-red-400" /></Button>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -158,6 +162,29 @@ export default function AccountsPage() {
         </Table>
         <div className="border-t px-5 py-2.5 text-xs text-muted-foreground">Showing {filtered.length} of {accounts.length} entries</div>
       </div>
+
+      {/* Delete Warning Modal */}
+      <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+              <AlertTriangle size={20} /> Permanent Deletion Warning
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-2 text-xs text-muted-foreground space-y-2">
+            <p>
+              Are you sure you want to permanently delete account <strong className="text-foreground">{deleteTarget?.name}</strong>?
+            </p>
+            <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
+              ⚠️ Warning: This record will be permanently deleted from the PostgreSQL database and cannot be recovered.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+            <Button variant="destructive" size="sm" onClick={confirmDelete}>Permanently Delete</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">

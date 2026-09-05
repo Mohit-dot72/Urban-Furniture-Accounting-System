@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Bell, Users, Package, Wallet,
@@ -28,31 +29,35 @@ const navItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [collapsed, setCollapsed] = useState(false);
+
+  const fullName = session?.user?.name || "Mohit Kumar";
+  const [firstName = "", lastName = ""] = fullName.split(" ");
+  const initials = ((firstName[0] || "") + (lastName[0] || "")).toUpperCase() || "MK";
 
   return (
     <aside
       className={cn(
-        "relative flex flex-col h-screen bg-[#1e2a3a] transition-all duration-300 shrink-0",
+        "relative flex flex-col h-screen bg-card text-foreground border-r border-border transition-all duration-300 shrink-0",
         collapsed ? "w-[60px]" : "w-[210px]"
       )}
-      style={{ borderRight: "1px solid #2d3f55" }}
     >
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-4 py-4 border-b border-[#2d3f55]">
-        <div className="w-7 h-7 bg-blue-500 rounded-lg flex items-center justify-center shrink-0">
+      <div className="flex items-center gap-2.5 px-4 py-4 border-b border-border">
+        <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
           <Building2 size={14} className="text-white" />
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <p className="text-white font-bold text-xs leading-tight tracking-wider">URBAN</p>
-            <p className="text-muted-foreground text-[9px] uppercase tracking-widest">Furniture</p>
+            <p className="text-foreground font-bold text-xs leading-tight tracking-wider">URBAN</p>
+            <p className="text-muted-foreground text-[9px] uppercase tracking-widest font-medium">Furniture</p>
           </div>
         )}
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-3 overflow-y-auto">
+      <nav className="flex-1 py-3 overflow-y-auto space-y-0.5">
         {navItems.map((item) => {
           const isActive = item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
           return (
@@ -61,38 +66,39 @@ export function AppSidebar() {
               href={item.url}
               title={collapsed ? item.title : undefined}
               className={cn(
-                "flex items-center gap-3 mx-2 px-3 py-2 rounded-lg mb-0.5 text-muted-foreground hover:text-white hover:bg-[#253347] transition-all duration-150 group",
-                isActive && "bg-blue-600 text-white hover:bg-blue-600"
+                "flex items-center gap-3 mx-2 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-all duration-150 group font-medium text-[12.5px]",
+                isActive && "bg-blue-600 text-white hover:bg-blue-600 font-semibold shadow-sm hover:text-white"
               )}
             >
-              <item.icon size={15} className="shrink-0" />
+              <item.icon size={15} className={cn("shrink-0", isActive ? "text-white" : "text-muted-foreground group-hover:text-foreground")} />
               {!collapsed && (
-                <span className="text-[12.5px] font-medium truncate">{item.title}</span>
+                <span className="truncate">{item.title}</span>
               )}
             </Link>
           );
         })}
       </nav>
 
-      {/* User */}
+      {/* User Footer */}
       {!collapsed && (
-        <div className="px-3 py-3 border-t border-[#2d3f55]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
-              MK
+        <div className="px-3 py-3 border-t border-border">
+          <Link href="/settings" className="flex items-center gap-2.5 hover:bg-muted/50 p-1.5 rounded-lg transition-colors">
+            <div className="w-7 h-7 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs">
+              {initials}
             </div>
             <div className="overflow-hidden">
-              <p className="text-white text-xs font-medium truncate">Mohit Kumar</p>
+              <p className="text-foreground text-xs font-medium truncate">{fullName}</p>
               <p className="text-muted-foreground text-[10px]">Admin</p>
             </div>
-          </div>
+          </Link>
         </div>
       )}
 
-      {/* Collapse toggle */}
+      {/* Collapse toggle button */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 bg-[#1e2a3a] border border-[#2d3f55] rounded-full flex items-center justify-center text-muted-foreground hover:text-white z-10"
+        className="absolute -right-3 top-5 w-6 h-6 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm transition-transform z-20"
+        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </button>

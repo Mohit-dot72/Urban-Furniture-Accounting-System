@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,7 +13,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Plus, Search, Pencil, Trash2, Loader2 } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Loader2, AlertTriangle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -86,10 +87,14 @@ export default function JournalsPage() {
     }
   };
 
-  const del = async (id: string) => {
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await fetch(`/api/journals/${id}`, { method: "DELETE" });
-      setJournals((prev) => prev.filter((j) => j.id !== id));
+      await fetch(`/api/journals/${deleteTarget.id}`, { method: "DELETE" });
+      setJournals((prev) => prev.filter((j) => j.id !== deleteTarget.id));
+      setDeleteTarget(null);
     } catch (err) {
       console.error("Failed to delete journal", err);
     }
@@ -100,8 +105,16 @@ export default function JournalsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Journals</h1>
-        <Button size="sm" onClick={openAdd} className="gap-1.5"><Plus size={15} /> New Journal</Button>
+        <div>
+          <h1 className="text-xl font-semibold">Journals</h1>
+          <p className="text-xs text-muted-foreground">Manage journal master categories & double-entry posting ledgers</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link href="/transactions">
+            <Button variant="outline" size="sm" className="text-xs">View Journal Entries</Button>
+          </Link>
+          <Button size="sm" onClick={openAdd} className="gap-1.5"><Plus size={15} /> New Journal</Button>
+        </div>
       </div>
 
       <div className="relative max-w-sm">
@@ -142,7 +155,7 @@ export default function JournalsPage() {
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(j)}><Pencil size={13} className="text-muted-foreground" /></Button>
-                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => del(j.id)}><Trash2 size={13} className="text-red-400" /></Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeleteTarget(j)}><Trash2 size={13} className="text-red-400" /></Button>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -152,6 +165,29 @@ export default function JournalsPage() {
         </Table>
         <div className="border-t px-5 py-2.5 text-xs text-muted-foreground">Showing {filtered.length} of {journals.length} entries</div>
       </div>
+
+      {/* Delete Warning Modal */}
+      <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+              <AlertTriangle size={20} /> Permanent Deletion Warning
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-2 text-xs text-muted-foreground space-y-2">
+            <p>
+              Are you sure you want to permanently delete journal <strong className="text-foreground">{deleteTarget?.name}</strong>?
+            </p>
+            <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
+              ⚠️ Warning: This record will be permanently deleted from the PostgreSQL database and cannot be recovered.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+            <Button variant="destructive" size="sm" onClick={confirmDelete}>Permanently Delete</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">

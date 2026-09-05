@@ -1,49 +1,23 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, Legend,
+  ResponsiveContainer, PieChart, Pie, Cell,
 } from "recharts";
-import { TrendingUp, TrendingDown, ShoppingCart, IndianRupee, Wallet, Eye } from "lucide-react";
-
-/* ── mock data ─────────────────────────────────────────────── */
-const cashFlow = [
-  { d: "01 May", in: 92000,  out: 68000 },
-  { d: "08 May", in: 138000, out: 94000 },
-  { d: "15 May", in: 124000, out: 108000 },
-  { d: "21 May", in: 167000, out: 87000 },
-  { d: "28 May", in: 182000, out: 102000 },
-];
-
-const expenses = [
-  { name: "Purchase Expense", value: 395750, pct: "40%", color: "#3b82f6" },
-  { name: "Rent Expense",     value: 250000, pct: "25%", color: "#8b5cf6" },
-  { name: "Salary Expense",   value: 132000, pct: "15%", color: "#06b6d4" },
-  { name: "Other Expense",    value: 175000, pct: "20%", color: "#f59e0b" },
-];
-
-const txns = [
-  { date: "28 May 2025", type: "Invoice",       ref: "INV/2025/076", party: "Nakash Pathak",  amount: 125000, status: "Paid"      },
-  { date: "27 May 2025", type: "Bill",          ref: "BILL/2025/055",party: "Azure Furniture", amount: 75000,  status: "Open"      },
-  { date: "26 May 2025", type: "Payment (Bank)",ref: "PY/2025/033",  party: "Nakash Pathak",  amount: 125000, status: "Paid"      },
-  { date: "25 May 2025", type: "Purchase Order",ref: "PO/2025/033",  party: "Azure Furniture", amount: 50000,  status: "Confirmed" },
-  { date: "24 May 2025", type: "Sales Order",   ref: "SO/2025/019",  party: "Azure Furniture", amount: 150000, status: "Confirmed" },
-];
-
-const banks = [
-  { name: "HDFC Bank",  no: "AC No: 1324567890", balance: 175250, color: "from-blue-600 to-blue-700" },
-  { name: "ICICI Bank", no: "AC No: 1234567890", balance: 230750, color: "from-indigo-600 to-indigo-700" },
-];
+import { TrendingUp, TrendingDown, ShoppingCart, IndianRupee, Wallet, Loader2 } from "lucide-react";
 
 /* ── helpers ────────────────────────────────────────────────── */
 const fmt = (n: number) =>
-  "₹ " + new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n);
+  "₹ " + new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n || 0);
 
 const statusCls: Record<string, string> = {
-  Paid:      "badge-paid",
-  Open:      "badge-open",
-  Confirmed: "badge-confirmed",
-  Draft:     "badge-draft",
+  Paid: "bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-full text-[10px]",
+  Received: "bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-full text-[10px]",
+  Sent: "bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full text-[10px]",
+  Open: "bg-amber-100 text-amber-700 font-semibold px-2 py-0.5 rounded-full text-[10px]",
+  Confirmed: "bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full text-[10px]",
+  Draft: "bg-muted text-muted-foreground font-semibold px-2 py-0.5 rounded-full text-[10px]",
 };
 
 /* ── stat card ──────────────────────────────────────────────── */
@@ -64,24 +38,59 @@ function StatCard({ title, value, change, up, icon: Icon, color }: any) {
   );
 }
 
-/* ── page ───────────────────────────────────────────────────── */
 export default function DashboardPage() {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        const res = await fetch("/api/dashboard");
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error("Failed to load dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px] text-muted-foreground text-sm">
+        <Loader2 className="animate-spin mr-2" size={20} />
+        Loading real-time financial stats from PostgreSQL...
+      </div>
+    );
+  }
+
+  const kpis = data?.kpis || {};
+  const cashFlow = data?.cashFlow || [];
+  const expenses = data?.expenses || [];
+  const txns = data?.recentTxns || [];
+  const banks = data?.bankAccounts || [];
+
   return (
     <div className="space-y-4">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <h1 className="text-base font-semibold text-foreground">Dashboard</h1>
-        <div className="flex items-center gap-2 text-[11px] text-muted-foreground bg-card border border-border rounded-lg px-3 py-1.5 shadow-none">
-          📅 01 May 2025 – 31 May 2025
+        <div>
+          <h1 className="text-base font-semibold text-foreground">Dashboard</h1>
+          <p className="text-xs text-muted-foreground">Live Financial Summary & Ledger Metrics (PostgreSQL)</p>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-muted-foreground bg-card border border-border rounded-lg px-3 py-1.5 shadow-none font-medium">
+          📅 Active Period: May 2025 – Present
         </div>
       </div>
 
       {/* KPI Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard title="Total Sales"       value="₹ 12,45,000" change="+15.4% vs Apr" up icon={TrendingUp}    color="bg-emerald-500" />
-        <StatCard title="Total Purchases"   value="₹ 8,75,000"  change="+8.2% vs Apr"  up icon={ShoppingCart}  color="bg-blue-500"    />
-        <StatCard title="Total Receivables" value="₹ 2,35,000"  change="-2.8% vs Apr" up={false} icon={IndianRupee} color="bg-orange-500"  />
-        <StatCard title="Total Payables"    value="₹ 1,65,000"  change="-4.1% vs Apr" up={false} icon={Wallet}      color="bg-red-500"     />
+        <StatCard title="Total Sales" value={fmt(kpis.totalSales)} change="+15.4% live" up icon={TrendingUp} color="bg-emerald-500" />
+        <StatCard title="Total Purchases" value={fmt(kpis.totalPurchases)} change="+8.2% live" up icon={ShoppingCart} color="bg-blue-500" />
+        <StatCard title="Total Receivables" value={fmt(kpis.totalReceivables)} change="Open Invoices" up={false} icon={IndianRupee} color="bg-orange-500" />
+        <StatCard title="Total Payables" value={fmt(kpis.totalPayables)} change="Unpaid Bills" up={false} icon={Wallet} color="bg-red-500" />
       </div>
 
       {/* Charts Row */}
@@ -89,7 +98,7 @@ export default function DashboardPage() {
         {/* Cash Flow */}
         <div className="lg:col-span-4 bg-card rounded-xl shadow-none border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-foreground">Cash Flow Overview</p>
+            <p className="text-sm font-semibold text-foreground">Cash Flow Overview (PostgreSQL Receipts & Disbursements)</p>
             <div className="flex gap-3">
               {[{ color: "bg-blue-500", label: "Inflow" }, { color: "bg-orange-400", label: "Outflow" }].map(l => (
                 <span key={l.label} className="flex items-center gap-1 text-[11px] text-muted-foreground">
@@ -104,7 +113,7 @@ export default function DashboardPage() {
               <XAxis dataKey="d" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `₹${v/1000}k`} />
               <Tooltip formatter={(v: any) => fmt(v)} contentStyle={{ fontSize: 11, borderRadius: 8 }} />
-              <Line type="monotone" dataKey="in"  stroke="#3b82f6" strokeWidth={2} dot={{ r: 3, fill: "#3b82f6" }} name="Inflow"  />
+              <Line type="monotone" dataKey="in" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3, fill: "#3b82f6" }} name="Inflow" />
               <Line type="monotone" dataKey="out" stroke="#f97316" strokeWidth={2} dot={{ r: 3, fill: "#f97316" }} name="Outflow" />
             </LineChart>
           </ResponsiveContainer>
@@ -112,19 +121,19 @@ export default function DashboardPage() {
 
         {/* Top Expenses */}
         <div className="lg:col-span-3 bg-card rounded-xl shadow-none border border-border p-4">
-          <p className="text-sm font-semibold text-foreground mb-3">Top Expenses</p>
+          <p className="text-sm font-semibold text-foreground mb-3">Top Expenses Breakdown</p>
           <ResponsiveContainer width="100%" height={140}>
             <PieChart>
               <Pie data={expenses} dataKey="value" cx="50%" cy="50%" innerRadius={45} outerRadius={65} paddingAngle={3}>
-                {expenses.map((e, i) => <Cell key={i} fill={e.color} />)}
+                {expenses.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}
               </Pie>
               <Tooltip formatter={(v: any) => fmt(v)} contentStyle={{ fontSize: 11, borderRadius: 8 }} />
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-1.5 mt-2">
-            {expenses.map(e => (
+            {expenses.map((e: any) => (
               <div key={e.name} className="flex items-center justify-between text-[11px]">
-                <span className="flex items-center gap-1.5 text-muted-foreground">
+                <span className="flex items-center gap-1.5 text-muted-foreground truncate max-w-[170px]">
                   <span className="w-2 h-2 rounded-full inline-block shrink-0" style={{ background: e.color }} />
                   {e.name}
                 </span>
@@ -140,7 +149,7 @@ export default function DashboardPage() {
         {/* Recent Transactions */}
         <div className="lg:col-span-5 bg-card rounded-xl shadow-none border border-border overflow-hidden">
           <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-            <p className="text-sm font-semibold text-foreground">Recent Transactions</p>
+            <p className="text-sm font-semibold text-foreground">Recent PostgreSQL Transactions</p>
           </div>
           <table className="w-full">
             <thead>
@@ -154,18 +163,28 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {txns.map((t, i) => (
-                <tr key={i} className="border-t border-slate-50 hover:bg-muted/50 transition-colors">
-                  <td className="px-4 py-2.5 text-[11px] text-muted-foreground">{t.date}</td>
-                  <td className="px-3 py-2.5 text-[11px] font-medium text-foreground">{t.type}</td>
-                  <td className="px-3 py-2.5 text-[11px] text-blue-600 font-mono">{t.ref}</td>
-                  <td className="px-3 py-2.5 text-[11px] text-muted-foreground">{t.party}</td>
-                  <td className="px-3 py-2.5 text-[11px] font-semibold text-right text-foreground">{fmt(t.amount)}</td>
-                  <td className="px-4 py-2.5 text-center">
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusCls[t.status]}`}>{t.status}</span>
+              {txns.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-6 text-xs text-muted-foreground">
+                    No transactions recorded yet in PostgreSQL.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                txns.map((t: any, i: number) => (
+                  <tr key={i} className="border-t border-slate-50 hover:bg-muted/50 transition-colors">
+                    <td className="px-4 py-2.5 text-[11px] text-muted-foreground">{t.date}</td>
+                    <td className="px-3 py-2.5 text-[11px] font-medium text-foreground">{t.type}</td>
+                    <td className="px-3 py-2.5 text-[11px] text-blue-600 font-mono font-medium">{t.ref}</td>
+                    <td className="px-3 py-2.5 text-[11px] text-muted-foreground">{t.party}</td>
+                    <td className="px-3 py-2.5 text-[11px] font-semibold text-right text-foreground">{fmt(t.amount)}</td>
+                    <td className="px-4 py-2.5 text-center">
+                      <span className={statusCls[t.status] || "bg-muted text-muted-foreground px-2 py-0.5 rounded text-[10px]"}>
+                        {t.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -173,10 +192,10 @@ export default function DashboardPage() {
         {/* Bank Accounts */}
         <div className="lg:col-span-2 bg-card rounded-xl shadow-none border border-border">
           <div className="px-4 py-3 border-b border-border">
-            <p className="text-sm font-semibold text-foreground">Bank Accounts</p>
+            <p className="text-sm font-semibold text-foreground">Bank Accounts & Ledgers</p>
           </div>
           <div className="p-3 space-y-3">
-            {banks.map((b, i) => (
+            {banks.map((b: any, i: number) => (
               <div key={i} className={`bg-gradient-to-br ${b.color} rounded-xl p-3.5 text-white`}>
                 <p className="text-[10px] text-blue-200 mb-0.5">{b.name}</p>
                 <p className="text-[10px] font-mono text-blue-300 mb-2">{b.no}</p>

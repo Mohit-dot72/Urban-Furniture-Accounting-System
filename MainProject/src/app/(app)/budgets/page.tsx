@@ -9,7 +9,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
-import { Plus, Search, Trash2, Loader2 } from "lucide-react";
+import { Plus, Search, Trash2, Loader2, AlertTriangle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -75,10 +75,14 @@ export default function BudgetsPage() {
     }
   };
 
-  const del = async (id: string) => {
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await fetch(`/api/budgets/${id}`, { method: "DELETE" });
-      setBudgets((prev) => prev.filter((b) => b.id !== id));
+      await fetch(`/api/budgets/${deleteTarget.id}`, { method: "DELETE" });
+      setBudgets((prev) => prev.filter((b) => b.id !== deleteTarget.id));
+      setDeleteTarget(null);
     } catch (err) {
       console.error("Failed to delete budget", err);
     }
@@ -133,7 +137,7 @@ export default function BudgetsPage() {
                   <TableCell className="text-xs text-muted-foreground">{fmtDate(b.startDate)} – {fmtDate(b.endDate)}</TableCell>
                   <TableCell className="text-xs text-right font-semibold">{fmt(b.plannedAmount)}</TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => del(b.id)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeleteTarget(b)}>
                       <Trash2 size={13} className="text-red-400" />
                     </Button>
                   </TableCell>
@@ -144,6 +148,29 @@ export default function BudgetsPage() {
         </Table>
         <div className="border-t px-5 py-2.5 text-xs text-muted-foreground">Showing {filtered.length} of {budgets.length} entries</div>
       </div>
+
+      {/* Delete Warning Modal */}
+      <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+              <AlertTriangle size={20} /> Permanent Deletion Warning
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-2 text-xs text-muted-foreground space-y-2">
+            <p>
+              Are you sure you want to permanently delete budget <strong className="text-foreground">{deleteTarget?.name}</strong>?
+            </p>
+            <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
+              ⚠️ Warning: This record will be permanently deleted from the PostgreSQL database and cannot be recovered.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+            <Button variant="destructive" size="sm" onClick={confirmDelete}>Permanently Delete</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">
