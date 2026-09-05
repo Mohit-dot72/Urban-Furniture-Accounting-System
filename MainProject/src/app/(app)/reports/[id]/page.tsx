@@ -40,41 +40,7 @@ const reportMeta: Record<string, { title: string; subtitle: string; icon: any; c
   },
 };
 
-// Detailed Financial Mock Data
-const balanceSheetDetails = {
-  assets: [
-    { code: "1010", account: "Cash & Bank Balance (HDFC / ICICI)", category: "Current Assets", amount: 485000 },
-    { code: "1020", account: "Accounts Receivable (Customer Invoices)", category: "Current Assets", amount: 375000 },
-    { code: "1030", account: "Furniture & Timber Inventory Valuation", category: "Current Assets", amount: 385000 },
-    { code: "1510", account: "Showroom Furniture & Fixtures", category: "Fixed Assets", amount: 420000 },
-    { code: "1520", account: "Warehouse Woodworking Machinery", category: "Fixed Assets", amount: 185000 },
-  ],
-  liabilities: [
-    { code: "2010", account: "Accounts Payable (Vendor Bills)", category: "Current Liabilities", amount: 245000 },
-    { code: "2020", account: "GST Payable & Tax Accruals", category: "Current Liabilities", amount: 68000 },
-    { code: "2030", account: "Short-term Working Capital Loan", category: "Current Liabilities", amount: 122000 },
-  ],
-  equity: [
-    { code: "3010", account: "Owner Share Capital", category: "Equity", amount: 800000 },
-    { code: "3020", account: "Retained Earnings", category: "Equity", amount: 320000 },
-  ],
-};
 
-const plMonthlyDetails = [
-  { month: "Jan 2025", revenue: 180000, cogs: 75000, expense: 45000, netProfit: 60000 },
-  { month: "Feb 2025", revenue: 210000, cogs: 88000, expense: 52000, netProfit: 70000 },
-  { month: "Mar 2025", revenue: 195000, cogs: 82000, expense: 48000, netProfit: 65000 },
-  { month: "Apr 2025", revenue: 230000, cogs: 98000, expense: 62000, netProfit: 70000 },
-  { month: "May 2025", revenue: 245000, cogs: 105000, expense: 60000, netProfit: 80000 },
-];
-
-const budgetVarianceDetails = [
-  { department: "Showroom Rent & Utilities", planned: 450000, actual: 384300, variance: 65700, status: "Under Budget" },
-  { department: "Timber & Raw Material Sourcing", planned: 600000, actual: 642000, variance: -42000, status: "Over Budget" },
-  { department: "Marketing & Decor Exhibitions", planned: 150000, actual: 118000, variance: 32000, status: "Under Budget" },
-  { department: "Logistics & Freight Transport", planned: 120000, actual: 105000, variance: 15000, status: "Under Budget" },
-  { department: "Staff Payroll & Workshop Wages", planned: 350000, actual: 345000, variance: 5000, status: "Under Budget" },
-];
 
 export default function ReportDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -105,9 +71,23 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
 
   const IconComponent = meta.icon;
 
-  const totalAssets = liveData?.totals?.totalAssets || 1245000;
-  const totalLiabilities = liveData?.totals?.totalLiabilities || 435000;
-  const totalEquity = liveData?.totals?.totalEquity || 810000;
+  const totalAssets = liveData?.totals?.totalAssets || 0;
+  const totalLiabilities = liveData?.totals?.totalLiabilities || 0;
+  const totalEquity = liveData?.totals?.totalEquity || 0;
+
+  const balanceSheetDetails = {
+    assets: liveData?.balanceSheetDetails?.assets || [],
+    liabilities: liveData?.balanceSheetDetails?.liabilities || [],
+    equity: liveData?.balanceSheetDetails?.equity || [],
+  };
+
+  const plMonthlyDetails: any[] = liveData?.plMonthlyDetails || [];
+  const budgetVarianceDetails: any[] = liveData?.budgetVarianceDetails || [];
+
+  const ytdRev = plMonthlyDetails.reduce((s: number, r: any) => s + (r.revenue || 0), 0);
+  const ytdCogs = plMonthlyDetails.reduce((s: number, r: any) => s + (r.cogs || 0), 0);
+  const ytdExp = plMonthlyDetails.reduce((s: number, r: any) => s + (r.expense || 0), 0);
+  const ytdNet = plMonthlyDetails.reduce((s: number, r: any) => s + (r.netProfit || 0), 0);
 
   const handlePrint = () => {
     window.print();
@@ -214,7 +194,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
                     </tr>
                   </thead>
                   <tbody>
-                    {balanceSheetDetails.assets.map((a) => (
+                    {balanceSheetDetails.assets.map((a: any) => (
                       <tr key={a.code} className="border-b border-border/60 hover:bg-muted/40">
                         <td className="p-3 font-mono text-blue-600 font-medium">{a.code}</td>
                         <td className="p-3 font-medium text-foreground">{a.account}</td>
@@ -245,7 +225,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
                     </tr>
                   </thead>
                   <tbody>
-                    {[...balanceSheetDetails.liabilities, ...balanceSheetDetails.equity].map((item) => (
+                    {[...balanceSheetDetails.liabilities, ...balanceSheetDetails.equity].map((item: any) => (
                       <tr key={item.code} className="border-b border-border/60 hover:bg-muted/40">
                         <td className="p-3 font-mono text-purple-600 font-medium">{item.code}</td>
                         <td className="p-3 font-medium text-foreground">{item.account}</td>
@@ -307,10 +287,10 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
                   ))}
                   <tr className="bg-muted/80 font-bold text-sm">
                     <td className="p-3.5 rounded-l-xl">Total YTD</td>
-                    <td className="p-3.5 text-right text-emerald-600">{fmt(1060000)}</td>
-                    <td className="p-3.5 text-right text-amber-600">{fmt(450000)}</td>
-                    <td className="p-3.5 text-right text-red-500">{fmt(265000)}</td>
-                    <td className="p-3.5 text-right text-blue-600 rounded-r-xl">{fmt(345000)}</td>
+                    <td className="p-3.5 text-right text-emerald-600">{fmt(ytdRev)}</td>
+                    <td className="p-3.5 text-right text-amber-600">{fmt(ytdCogs)}</td>
+                    <td className="p-3.5 text-right text-red-500">{fmt(ytdExp)}</td>
+                    <td className="p-3.5 text-right text-blue-600 rounded-r-xl">{fmt(ytdNet)}</td>
                   </tr>
                 </tbody>
               </table>
