@@ -143,7 +143,7 @@ export default function PaymentsPage() {
         <div>
           <h1 className="text-xl font-semibold">Payments</h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            PostgreSQL Live Receipts & Vendor Payments
+            Live Receipts & Vendor Payments
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -189,7 +189,7 @@ export default function PaymentsPage() {
         {loading ? (
           <div className="p-12 text-center text-xs text-muted-foreground flex flex-col items-center justify-center gap-2">
             <Loader2 size={20} className="animate-spin text-blue-500" />
-            Loading payments from PostgreSQL database...
+            Loading payments...
           </div>
         ) : fetchError ? (
           <div className="p-8 text-center text-xs text-red-500 space-y-2">
@@ -202,7 +202,7 @@ export default function PaymentsPage() {
           <div className="p-12 text-center space-y-2">
             <p className="text-sm font-semibold text-foreground">No payments found</p>
             <p className="text-xs text-muted-foreground">
-              No matching database payment records found. Click &quot;New Payment&quot; to add a payment to PostgreSQL.
+              No matching payment records found. Click &quot;New Payment&quot; to add a payment.
             </p>
           </div>
         ) : (
@@ -272,7 +272,7 @@ export default function PaymentsPage() {
               Are you sure you want to permanently delete payment receipt <strong className="text-foreground">{deleteTarget?.paymentNo}</strong> ({deleteTarget?.contact})?
             </p>
             <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
-              ⚠️ Warning: This payment record will be permanently deleted from the PostgreSQL database and cannot be recovered.
+              ⚠️ Warning: This payment record will be permanently deleted and cannot be recovered.
             </p>
           </div>
           <DialogFooter>
@@ -285,7 +285,7 @@ export default function PaymentsPage() {
       {/* New Payment Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md rounded-2xl">
-          <DialogHeader><DialogTitle>New Payment (PostgreSQL)</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>New Payment</DialogTitle></DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -335,10 +335,10 @@ export default function PaymentsPage() {
               <Button type="submit" size="sm" disabled={submitting} className="bg-blue-600 hover:bg-blue-500 font-semibold gap-1.5">
                 {submitting ? (
                   <>
-                    <Loader2 size={14} className="animate-spin" /> Saving to DB...
+                    <Loader2 size={14} className="animate-spin" /> Saving...
                   </>
                 ) : (
-                  "Save to PostgreSQL"
+                  "Save Payment"
                 )}
               </Button>
             </DialogFooter>

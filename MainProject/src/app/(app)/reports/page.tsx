@@ -155,7 +155,7 @@ export default function ReportsPage() {
       <Card className="border border-border shadow-none rounded-2xl overflow-hidden">
         <CardHeader className="pb-3 pt-5 px-6 flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-bold">Key Financial Metrics — Active Period</CardTitle>
-          <span className="text-xs font-mono text-muted-foreground">PostgreSQL Audited</span>
+          <span className="text-xs font-mono text-muted-foreground">Audited Ledger</span>
         </CardHeader>
         <CardContent className="px-0 pb-2">
           <table className="w-full text-sm">

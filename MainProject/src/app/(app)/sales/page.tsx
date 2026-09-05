@@ -220,9 +220,8 @@ export default function SalesFlowPage() {
               </div>
               <div className="flex justify-between items-center pt-2">
                 <span className="text-muted-foreground">Status</span>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                  selectedSO.invoice?.status === "Paid" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-orange-50 text-orange-700 border border-orange-200"
-                }`}>
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${selectedSO.invoice?.status === "Paid" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-orange-50 text-orange-700 border border-orange-200"
+                  }`}>
                   {selectedSO.invoice?.status || "Open"}
                 </span>
               </div>
@@ -264,9 +263,8 @@ export default function SalesFlowPage() {
               </div>
               <div className="flex justify-between items-center pt-2">
                 <span className="text-muted-foreground">Status</span>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                  selectedSO.receipt?.status === "Received" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-muted text-muted-foreground"
-                }`}>
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${selectedSO.receipt?.status === "Received" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-muted text-muted-foreground"
+                  }`}>
                   {selectedSO.receipt?.status || "Pending"}
                 </span>
               </div>
@@ -301,7 +299,7 @@ export default function SalesFlowPage() {
           {loading ? (
             <div className="p-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
               <Loader2 size={18} className="animate-spin text-blue-500" />
-              Loading sales orders from PostgreSQL...
+              Loading sales orders...
             </div>
           ) : filtered.length === 0 ? (
             <div className="p-12 text-center text-xs text-muted-foreground">
@@ -367,7 +365,7 @@ export default function SalesFlowPage() {
               Are you sure you want to permanently delete sales order <strong className="text-foreground">{deleteTarget?.orderNo}</strong> ({deleteTarget?.customerName})?
             </p>
             <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
-              ⚠️ Warning: This sales order will be permanently deleted from the PostgreSQL database and cannot be recovered.
+              ⚠️ Warning: This sales order will be permanently deleted and cannot be recovered.
             </p>
           </div>
           <DialogFooter>
@@ -381,7 +379,7 @@ export default function SalesFlowPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md rounded-2xl">
           <DialogHeader>
-            <DialogTitle>New Sales Order (PostgreSQL)</DialogTitle>
+            <DialogTitle>New Sales Order</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

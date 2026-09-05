@@ -90,8 +90,8 @@ export async function GET() {
     notifications.push({
       id: `notif-${idCounter++}`,
       title: "System Audit Log",
-      message: "Database successfully connected to PostgreSQL with active seed records.",
-      details: "Audit logging active. System connected via Prisma ORM to PostgreSQL server.",
+      message: "Database successfully connected with active seed records.",
+      details: "Audit logging active. System connected and operating normally.",
       timestamp: "Just now",
       category: "SYSTEM",
       read: true,

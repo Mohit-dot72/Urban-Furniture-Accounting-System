@@ -239,7 +239,7 @@ export default function ContactsPage() {
               Are you sure you want to permanently delete contact <strong className="text-foreground">{deleteTarget?.name}</strong>?
             </p>
             <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
-              ⚠️ Warning: This record will be permanently deleted from the PostgreSQL database and cannot be recovered.
+              ⚠️ Warning: This record will be permanently deleted and cannot be recovered.
             </p>
           </div>
           <DialogFooter>

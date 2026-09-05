@@ -204,7 +204,7 @@ export default function TransactionsPage() {
             {loading ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8 text-sm text-muted-foreground">
-                  <Loader2 className="animate-spin inline-block mr-2" size={16} /> Loading journal entries from PostgreSQL...
+                  <Loader2 className="animate-spin inline-block mr-2" size={16} /> Loading journal entries...
                 </TableCell>
               </TableRow>
             ) : filtered.length === 0 ? (
@@ -280,7 +280,7 @@ export default function TransactionsPage() {
               Are you sure you want to permanently delete journal entry <strong className="text-foreground">{deleteTarget?.entryNo}</strong>?
             </p>
             <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
-              ⚠️ Warning: This double-entry transaction will be permanently deleted from the PostgreSQL database and cannot be recovered.
+              ⚠️ Warning: This double-entry transaction will be permanently deleted and cannot be recovered.
             </p>
           </div>
           <DialogFooter>

@@ -141,7 +141,7 @@ export default function PurchaseFlowPage() {
         <div>
           <h1 className="text-xl font-semibold">Purchase Flow</h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            PostgreSQL Live Purchase Orders, Vendor Bills & Payments
+            Live Purchase Orders, Vendor Bills & Payments
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -301,7 +301,7 @@ export default function PurchaseFlowPage() {
           {loading ? (
             <div className="p-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
               <Loader2 size={18} className="animate-spin text-blue-500" />
-              Loading purchase orders from PostgreSQL...
+              Loading purchase orders...
             </div>
           ) : filtered.length === 0 ? (
             <div className="p-12 text-center text-xs text-muted-foreground">
@@ -367,7 +367,7 @@ export default function PurchaseFlowPage() {
               Are you sure you want to permanently delete purchase order <strong className="text-foreground">{deleteTarget?.orderNo}</strong> ({deleteTarget?.vendorName})?
             </p>
             <p className="bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-200">
-              ⚠️ Warning: This purchase order will be permanently deleted from the PostgreSQL database and cannot be recovered.
+              ⚠️ Warning: This purchase order will be permanently deleted and cannot be recovered.
             </p>
           </div>
           <DialogFooter>
@@ -381,7 +381,7 @@ export default function PurchaseFlowPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md rounded-2xl">
           <DialogHeader>
-            <DialogTitle>New Purchase Order (PostgreSQL)</DialogTitle>
+            <DialogTitle>New Purchase Order</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

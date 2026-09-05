@@ -111,7 +111,7 @@ export default function DashboardPage() {
             <LineChart data={cashFlow} margin={{ top: 2, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="d" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `₹${v/1000}k`} />
+              <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `₹${v / 1000}k`} />
               <Tooltip formatter={(v: any) => fmt(v)} contentStyle={{ fontSize: 11, borderRadius: 8 }} />
               <Line type="monotone" dataKey="in" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3, fill: "#3b82f6" }} name="Inflow" />
               <Line type="monotone" dataKey="out" stroke="#f97316" strokeWidth={2} dot={{ r: 3, fill: "#f97316" }} name="Outflow" />
