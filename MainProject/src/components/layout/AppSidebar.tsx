@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Bell, Users, Package, Wallet,
   BookOpen, ArrowRightLeft, CreditCard, PieChart,
-  BarChart3, Settings, Building2, ChevronLeft, ChevronRight
+  BarChart3, Settings, Building2, ChevronLeft, ChevronRight, LogOut
 } from "lucide-react";
 import { useState } from "react";
 
@@ -81,16 +81,23 @@ export function AppSidebar() {
 
       {/* User Footer */}
       {!collapsed && (
-        <div className="px-3 py-3 border-t border-border">
-          <Link href="/settings" className="flex items-center gap-2.5 hover:bg-muted/50 p-1.5 rounded-lg transition-colors">
+        <div className="px-3 py-3 border-t border-border flex items-center justify-between">
+          <Link href="/settings" className="flex items-center gap-2.5 hover:bg-muted/50 p-1.5 rounded-lg transition-colors flex-1 overflow-hidden">
             <div className="w-7 h-7 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs">
               {initials}
             </div>
             <div className="overflow-hidden">
               <p className="text-foreground text-xs font-medium truncate">{fullName}</p>
-              <p className="text-muted-foreground text-[10px]">Admin</p>
+              <p className="text-muted-foreground text-[10px] truncate">{session?.user?.email || "Admin"}</p>
             </div>
           </Link>
+          <button
+            onClick={() => signOut({ callbackUrl: "/auth/login" })}
+            className="p-1.5 rounded-lg text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors shrink-0"
+            title="Sign Out"
+          >
+            <LogOut size={15} />
+          </button>
         </div>
       )}
 
