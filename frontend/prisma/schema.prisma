@@ -1,0 +1,306 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users & Auth ───────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role     @default(INVOICING_USER)
+  language  String   @default("English")
+  dateFormat String  @default("dd/MM/yyyy")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  INVOICING_USER
+  CONTACT
+}
+
+// ─── Contacts (Customer / Vendor / Both) ────────────────────────────────────
+
+model Contact {
+  id        String      @id @default(cuid())
+  name      String
+  type      ContactType
+  email     String?
+  mobile    String?
+  city      String?
+  state     String?
+  pincode   String?
+  address   String?
+  gstNo     String?
+  status    String      @default("Active")
+
+  salesOrders     SalesOrder[]
+  invoices        Invoice[]
+  purchaseOrders  PurchaseOrder[]
+  bills           Bill[]
+  payments        Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ContactType {
+  CUSTOMER
+  VENDOR
+  BOTH
+}
+
+// ─── Products ────────────────────────────────────────────────────────────────
+
+model Product {
+  id            String  @id @default(cuid())
+  name          String
+  type          String  // Goods | Service
+  category      String
+  salesPrice    Float
+  purchasePrice Float
+  status        String  @default("Active")
+
+  salesOrderLines    SalesOrderLine[]
+  invoiceLines       InvoiceLine[]
+  purchaseOrderLines PurchaseOrderLine[]
+  billLines          BillLine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Chart of Accounts ──────────────────────────────────────────────────────
+
+model Account {
+  id       String      @id @default(cuid())
+  code     String?     @unique
+  name     String
+  type     AccountType
+  category String?
+  status   String      @default("Active")
+
+  journalLines JournalLine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+// ─── Journals (Journal Master) ───────────────────────────────────────────────
+
+model Journal {
+  id      String      @id @default(cuid())
+  name    String
+  type    JournalType
+  status  String      @default("Active")
+
+  entries JournalEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum JournalType {
+  SALES
+  PURCHASE
+  BANK
+  CASH
+  GENERAL
+}
+
+// ─── Journal Entries (Double Entry) ─────────────────────────────────────────
+
+model JournalEntry {
+  id         String   @id @default(cuid())
+  entryNo    String   @unique
+  journalId  String
+  journal    Journal  @relation(fields: [journalId], references: [id])
+  date       DateTime
+  reference  String?
+  narration  String?
+  totalDebit Float
+  totalCredit Float
+
+  lines JournalLine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JournalLine {
+  id             String       @id @default(cuid())
+  journalEntryId String
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId      String
+  account        Account      @relation(fields: [accountId], references: [id])
+  description    String?
+  debit          Float        @default(0)
+  credit         Float        @default(0)
+}
+
+// ─── Sales Flow: Sales Order → Invoice → Receipt ─────────────────────────────
+
+model SalesOrder {
+  id          String      @id @default(cuid())
+  orderNo     String      @unique
+  contactId   String
+  contact     Contact     @relation(fields: [contactId], references: [id])
+  date        DateTime
+  status      String      @default("Confirmed") // Draft | Confirmed
+  total       Float
+  lines       SalesOrderLine[]
+  invoices    Invoice[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model SalesOrderLine {
+  id           String     @id @default(cuid())
+  salesOrderId String
+  salesOrder   SalesOrder @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product    @relation(fields: [productId], references: [id])
+  qty          Float
+  price        Float
+  amount       Float
+}
+
+model Invoice {
+  id           String    @id @default(cuid())
+  invoiceNo    String    @unique
+  contactId    String
+  contact      Contact   @relation(fields: [contactId], references: [id])
+  salesOrderId String?
+  salesOrder   SalesOrder? @relation(fields: [salesOrderId], references: [id])
+  date         DateTime
+  dueDate      DateTime?
+  status       String    @default("Open") // Open | Paid | Partially Paid
+  total        Float
+  lines        InvoiceLine[]
+  payments     Payment[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model InvoiceLine {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float
+  price       Float
+  amount      Float
+}
+
+// ─── Purchase Flow: PO → Bill → Payment ──────────────────────────────────────
+
+model PurchaseOrder {
+  id        String  @id @default(cuid())
+  orderNo   String  @unique
+  contactId String
+  contact   Contact @relation(fields: [contactId], references: [id])
+  date      DateTime
+  status    String  @default("Confirmed") // Draft | Confirmed
+  total     Float
+  lines     PurchaseOrderLine[]
+  bills     Bill[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PurchaseOrderLine {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product       @relation(fields: [productId], references: [id])
+  qty             Float
+  price           Float
+  amount          Float
+}
+
+model Bill {
+  id              String         @id @default(cuid())
+  billNo          String         @unique
+  contactId       String
+  contact         Contact        @relation(fields: [contactId], references: [id])
+  purchaseOrderId String?
+  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
+  date            DateTime
+  dueDate         DateTime?
+  status          String         @default("Open") // Open | Paid
+  total           Float
+  lines           BillLine[]
+  payments        Payment[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model BillLine {
+  id          String  @id @default(cuid())
+  billId      String
+  bill        Bill    @relation(fields: [billId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float
+  price       Float
+  amount      Float
+}
+
+// ─── Payments ─────────────────────────────────────────────────────────────────
+
+model Payment {
+  id          String   @id @default(cuid())
+  paymentNo   String   @unique
+  type        String   // Receive | Send
+  contactId   String
+  contact     Contact  @relation(fields: [contactId], references: [id])
+  invoiceId   String?
+  invoice     Invoice? @relation(fields: [invoiceId], references: [id])
+  billId      String?
+  bill        Bill?    @relation(fields: [billId], references: [id])
+  date        DateTime
+  amount      Float
+  mode        String   // Cash | Bank | UPI
+  reference   String?
+  status      String   @default("Received") // Received | Sent | Pending
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Budgets ──────────────────────────────────────────────────────────────────
+
+model Budget {
+  id            String   @id @default(cuid())
+  name          String
+  accountName   String
+  analyticAccount String?
+  startDate     DateTime
+  endDate       DateTime
+  plannedAmount Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
