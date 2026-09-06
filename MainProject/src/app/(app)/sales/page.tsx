@@ -278,7 +278,7 @@ export default function SalesFlowPage() {
         </div>
       )}
 
-      {/* Search & List Table of All PostgreSQL Sales Orders */}
+      {/* Search & List Table of All Sales Orders */}
       <div className="space-y-3 pt-4">
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1 max-w-sm">

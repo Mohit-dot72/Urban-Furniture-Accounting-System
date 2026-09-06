@@ -21,14 +21,14 @@ export async function GET() {
       prisma.budget.findMany(),
     ]);
 
-    // 1. Calculate Revenue and Expenses from PostgreSQL
+    // 1. Calculate Revenue and Expenses
     const totalRevenue = salesOrders.reduce((sum, so) => sum + (so.total || 0), 0);
     const totalPurchases = purchaseOrders.reduce((sum, po) => sum + (po.total || 0), 0);
     const totalExpenses = totalPurchases + 250000;
     const grossProfit = totalRevenue - totalPurchases;
     const netProfit = totalRevenue - totalExpenses;
 
-    // 2. Build Itemized Assets from PostgreSQL Account table + Receivables
+    // 2. Build Itemized Assets from Account table + Receivables
     const openInvoicesTotal = invoices
       .filter((i) => i.status !== "Paid")
       .reduce((sum, i) => sum + (i.total || 0), 0);
@@ -50,7 +50,7 @@ export async function GET() {
 
     const totalAssets = assetItems.reduce((sum, item) => sum + item.amount, 0) || 1245000;
 
-    // 3. Build Itemized Liabilities from PostgreSQL Account table + Payables
+    // 3. Build Itemized Liabilities from Account table + Payables
     const openBillsTotal = bills
       .filter((b) => b.status !== "Paid")
       .reduce((sum, b) => sum + (b.total || 0), 0);

@@ -54,7 +54,7 @@ export default function PaymentsPage() {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
 
-  // PostgreSQL Dynamic Payments State
+  // Dynamic Payments State
   const [payments, setPayments] = useState<PaymentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -79,7 +79,7 @@ export default function PaymentsPage() {
     defaultValues: { type: "RECEIVE", mode: "Bank", date: new Date().toISOString().split("T")[0] },
   });
 
-  // Fetch payments from PostgreSQL Database API
+  // Fetch payments from Database API
   const fetchPayments = async () => {
     setLoading(true);
     setFetchError("");
@@ -102,7 +102,7 @@ export default function PaymentsPage() {
     fetchPayments();
   }, []);
 
-  // Post new payment to PostgreSQL Database API
+  // Post new payment to Database API
   const onSubmit = async (data: PaymentForm) => {
     setSubmitting(true);
     try {

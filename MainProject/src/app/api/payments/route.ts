@@ -28,7 +28,7 @@ export async function GET() {
   } catch (error) {
     console.error("[GET /api/payments error]:", error);
     return NextResponse.json(
-      { error: "Failed to fetch payments from PostgreSQL" },
+      { error: "Failed to fetch payments" },
       { status: 500 }
     );
   }
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Find contact by name or create a new contact in PostgreSQL database
+    // Find contact by name or create a new contact
     let contactRecord = await prisma.contact.findFirst({
       where: { name: { equals: contact, mode: "insensitive" } },
     });
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[POST /api/payments error]:", error);
     return NextResponse.json(
-      { error: "Failed to create payment in PostgreSQL" },
+      { error: "Failed to create payment" },
       { status: 500 }
     );
   }

@@ -39,7 +39,7 @@ export async function GET(req: Request) {
       item.title.toLowerCase().includes(q.toLowerCase())
     );
 
-    // 2. Parallel PostgreSQL queries
+    // 2. Parallel database queries
     const [
       contacts,
       products,

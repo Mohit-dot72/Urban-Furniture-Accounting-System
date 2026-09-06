@@ -60,7 +60,7 @@ export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Fetch search results from PostgreSQL API
+  // Fetch search results from API
   useEffect(() => {
     if (!query.trim()) {
       setResults(null);
@@ -101,51 +101,33 @@ export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
   );
 
   return (
-    <header className="flex h-12 items-center gap-3 border-b border-border bg-card px-5 sticky top-0 z-30 shrink-0">
-      {/* Breadcrumb */}
-      {breadcrumb.length > 0 && (
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          {breadcrumb.map((b, i) => (
-            <span key={i} className="flex items-center gap-1.5">
-              {i > 0 && <span>/</span>}
-              <span className={i === breadcrumb.length - 1 ? "text-foreground font-medium" : ""}>{b}</span>
-            </span>
-          ))}
-        </div>
-      )}
+    <header className="h-14 border-b border-border bg-card px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shadow-2xl">
+      {/* Breadcrumb / Section Title */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-semibold text-foreground">
+          {breadcrumb.length > 0 ? breadcrumb.join(" / ") : "Accounting System"}
+        </span>
+      </div>
 
-      <div className="flex-1" />
-
-      {/* Global Command Search Bar */}
-      <div className="relative w-64 md:w-80" ref={containerRef}>
-        <div className="relative flex items-center">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground h-3.5 w-3.5" />
+      {/* Global Search Bar (Cmd+K) */}
+      <div className="relative flex-1 max-w-md mx-auto" ref={containerRef}>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-3.5 w-3.5" />
           <Input
             ref={inputRef}
+            type="text"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
               setIsOpen(true);
             }}
             onFocus={() => setIsOpen(true)}
-            placeholder="Search contacts, orders, products (Ctrl+K)..."
-            className="pl-8 pr-14 h-8 text-xs bg-muted/60 border-border rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500 font-medium"
+            placeholder="Search accounts, sales, purchases, contacts... (Ctrl+K)"
+            className="pl-9 pr-12 h-9 text-xs rounded-xl bg-muted/40 border-border focus:ring-2 focus:ring-blue-500/20"
           />
-          {query ? (
-            <button
-              onClick={() => {
-                setQuery("");
-                setResults(null);
-              }}
-              className="absolute right-2 text-muted-foreground hover:text-foreground"
-            >
-              <X size={13} />
-            </button>
-          ) : (
-            <kbd className="absolute right-2 pointer-events-none hidden sm:inline-flex h-5 select-none items-center gap-0.5 rounded border border-border bg-background px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-              <span className="text-[10px]">Ctrl K</span>
-            </kbd>
-          )}
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-muted-foreground bg-background border border-border px-1.5 py-0.5 rounded shadow-2xl">
+            ⌘K
+          </kbd>
         </div>
 
         {/* Search Results Dropdown Overlay */}
@@ -153,7 +135,7 @@ export function TopHeader({ breadcrumb = [] }: TopHeaderProps) {
           <div className="absolute top-full mt-1.5 right-0 left-0 md:left-auto md:w-[480px] bg-card border border-border rounded-2xl shadow-xl z-50 overflow-hidden text-xs max-h-[480px] flex flex-col">
             <div className="p-2.5 bg-muted/40 border-b border-border flex items-center justify-between text-muted-foreground text-[11px]">
               <span className="flex items-center gap-1 font-semibold text-foreground">
-                <Sparkles size={13} className="text-blue-500" /> PostgreSQL Quick Search
+                <Sparkles size={13} className="text-blue-500" /> Quick Search
               </span>
               <span>Press ESC to exit</span>
             </div>

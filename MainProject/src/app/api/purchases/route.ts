@@ -58,7 +58,7 @@ export async function GET() {
   } catch (error) {
     console.error("[GET /api/purchases error]:", error);
     return NextResponse.json(
-      { error: "Failed to fetch purchase orders from PostgreSQL" },
+      { error: "Failed to fetch purchase orders" },
       { status: 500 }
     );
   }
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Find contact by name or create a new vendor contact in PostgreSQL
+    // Find contact by name or create a new vendor contact
     let contact = await prisma.contact.findFirst({
       where: { name: { equals: vendorName, mode: "insensitive" } },
     });
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
     const dueDate = new Date(orderDate);
     dueDate.setDate(dueDate.getDate() + 14);
 
-    // Create Purchase Order & Vendor Bill in PostgreSQL
+    // Create Purchase Order & Vendor Bill
     const createdPO = await prisma.purchaseOrder.create({
       data: {
         orderNo,
@@ -148,7 +148,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[POST /api/purchases error]:", error);
     return NextResponse.json(
-      { error: "Failed to create purchase order in PostgreSQL" },
+      { error: "Failed to create purchase order" },
       { status: 500 }
     );
   }
