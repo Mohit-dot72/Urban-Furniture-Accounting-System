@@ -1,6 +1,66 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const contact = await prisma.contact.findUnique({
+      where: { id },
+      include: {
+        salesOrders: {
+          include: {
+            lines: {
+              include: { product: true },
+            },
+          },
+          orderBy: { date: "desc" },
+        },
+        invoices: {
+          include: {
+            lines: {
+              include: { product: true },
+            },
+            payments: true,
+          },
+          orderBy: { date: "desc" },
+        },
+        purchaseOrders: {
+          include: {
+            lines: {
+              include: { product: true },
+            },
+          },
+          orderBy: { date: "desc" },
+        },
+        bills: {
+          include: {
+            lines: {
+              include: { product: true },
+            },
+            payments: true,
+          },
+          orderBy: { date: "desc" },
+        },
+        payments: {
+          orderBy: { date: "desc" },
+        },
+      },
+    });
+
+    if (!contact) {
+      return NextResponse.json({ message: "Contact not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(contact);
+  } catch (error) {
+    console.error("Failed to fetch contact profile:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  }
+}
+
 export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -41,3 +101,4 @@ export async function PUT(
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
+

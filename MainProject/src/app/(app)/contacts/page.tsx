@@ -12,7 +12,10 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Plus, Search, Filter, Pencil, Trash2, Loader2, AlertTriangle } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Plus, Search, Filter, Pencil, Trash2, Loader2, AlertTriangle, Eye } from "lucide-react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -38,6 +41,7 @@ const typeLabels: Record<string, { label: string; className: string }> = {
 };
 
 export default function ContactsPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<"all" | "CUSTOMER" | "VENDOR">("all");
   const [open, setOpen] = useState(false);
@@ -185,12 +189,22 @@ export default function ContactsPage() {
               filtered.map((contact) => {
                 const typeStyle = typeLabels[contact.type] || typeLabels.CUSTOMER;
                 return (
-                  <TableRow key={contact.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium text-sm flex items-center gap-2.5 py-3">
-                      <div className="w-7 h-7 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
-                        {contact.name.slice(0, 2).toUpperCase()}
-                      </div>
-                      {contact.name}
+                  <TableRow
+                    key={contact.id}
+                    className="hover:bg-muted/50 cursor-pointer"
+                    onClick={() => router.push(`/contacts/${contact.id}`)}
+                  >
+                    <TableCell className="font-medium text-sm py-3">
+                      <Link
+                        href={`/contacts/${contact.id}`}
+                        className="flex items-center gap-2.5 hover:underline text-foreground"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="w-7 h-7 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+                          {contact.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <span className="font-semibold text-sm">{contact.name}</span>
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${typeStyle.className}`}>
@@ -205,12 +219,17 @@ export default function ContactsPage() {
                         {contact.status}
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(contact)}>
+                        <Link href={`/contacts/${contact.id}`}>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" title="View Profile">
+                            <Eye size={13} className="text-blue-500" />
+                          </Button>
+                        </Link>
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(contact)} title="Edit Contact">
                           <Pencil size={13} className="text-muted-foreground" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeleteTarget(contact)}>
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeleteTarget(contact)} title="Delete Contact">
                           <Trash2 size={13} className="text-red-400" />
                         </Button>
                       </div>
