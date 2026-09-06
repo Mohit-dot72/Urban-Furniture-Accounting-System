@@ -173,7 +173,7 @@ export default function BudgetsPage() {
       </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="sm:max-w-xl max-w-xl">
           <DialogHeader><DialogTitle>New Budget</DialogTitle></DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">

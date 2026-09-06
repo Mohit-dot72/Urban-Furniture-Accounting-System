@@ -187,7 +187,7 @@ export default function AccountsPage() {
       </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-xl max-w-xl">
           <DialogHeader><DialogTitle>{editing ? "Edit Account" : "New Account"}</DialogTitle></DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>

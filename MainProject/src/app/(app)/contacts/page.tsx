@@ -250,7 +250,7 @@ export default function ContactsPage() {
       </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="sm:max-w-2xl max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editingContact ? "Edit Contact" : "Add Contact"}</DialogTitle>
           </DialogHeader>

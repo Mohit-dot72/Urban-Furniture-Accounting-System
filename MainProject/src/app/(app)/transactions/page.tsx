@@ -292,7 +292,7 @@ export default function TransactionsPage() {
 
       {/* New Entry Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>New Journal Entry</DialogTitle>
           </DialogHeader>

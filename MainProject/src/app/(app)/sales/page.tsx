@@ -377,7 +377,7 @@ export default function SalesFlowPage() {
 
       {/* NEW SALES ORDER MODAL DIALOG */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md rounded-2xl">
+        <DialogContent className="sm:max-w-xl max-w-xl rounded-2xl">
           <DialogHeader>
             <DialogTitle>New Sales Order</DialogTitle>
           </DialogHeader>

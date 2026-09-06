@@ -379,7 +379,7 @@ export default function PurchaseFlowPage() {
 
       {/* NEW PURCHASE ORDER MODAL DIALOG */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md rounded-2xl">
+        <DialogContent className="sm:max-w-xl max-w-xl rounded-2xl">
           <DialogHeader>
             <DialogTitle>New Purchase Order</DialogTitle>
           </DialogHeader>

@@ -284,7 +284,7 @@ export default function PaymentsPage() {
 
       {/* New Payment Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md rounded-2xl">
+        <DialogContent className="sm:max-w-xl max-w-xl rounded-2xl">
           <DialogHeader><DialogTitle>New Payment</DialogTitle></DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">

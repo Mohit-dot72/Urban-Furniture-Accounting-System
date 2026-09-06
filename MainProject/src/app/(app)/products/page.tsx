@@ -198,7 +198,7 @@ export default function ProductsPage() {
       </Dialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="sm:max-w-xl max-w-xl">
           <DialogHeader><DialogTitle>{editing ? "Edit Product" : "New Product"}</DialogTitle></DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
